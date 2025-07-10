@@ -27,4 +27,8 @@ public class ConnectDB {
     public static void main(String[] args) {
         ConnectDB.getConnect();
     }
+
+    public static Connection getConnection() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
