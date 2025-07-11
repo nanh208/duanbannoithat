@@ -6,6 +6,10 @@ package view;
 
 import dao.TaiKhoanNVDAO;
 import entity.NhanVienEntity;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,33 +17,95 @@ import javax.swing.table.DefaultTableModel;
  * @author nem mèn mén
  */
 public class TaiKhoanNhanVien extends javax.swing.JPanel {
-
+    TaiKhoanNVDAO dao = new TaiKhoanNVDAO();
     /**
      * Creates new form TaiKhoanNhanVien
      */
     public TaiKhoanNhanVien() {
         initComponents();
+        fillTable();
     }
     public void fillTable() {
     DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
     model.setRowCount(0); // Xóa các dòng cũ
 
-    for (NhanVienEntity nv : TaiKhoanNVDAO.getAll()) {
+    for (NhanVienEntity nv : dao.getAll()) {
         Object row[] = {
-            nv.getTenTK(),      // Tên
-            nv.getMaTK(),       // Mã TK
-            nv.getEmail(),      // Email
-            nv.getSdt(),        // SDT
-            nv.getNamSinh(),    // Năm Sinh (java.sql.Date)
-            nv.getPassword(),   // Mật Khẩu
-            nv.getPermission()  // Quyền
+            nv.getTenTK(),    
+            nv.getMaTK(),      
+            nv.getEmail(),      
+            nv.getSdt(),        
+            nv.getNamSinh(),    
+            nv.getPassword(),   
+            nv.getPermission()  
         };
         model.addRow(row);
     }
-
     tblNhanVien.setModel(model);
-}
+    }
+    public NhanVienEntity getNhanVien() {
+    try {
+        // Lấy mã tài khoản
+        long maTK = 1;
+        if (!txtMaTK.getText().trim().isEmpty()) {
+            maTK = Long.parseLong(txtMaTK.getText().trim());
+        }
 
+        String tenTK = txtTenTK.getText().trim();
+        String email = txtEmail.getText().trim();
+        String strPassword = txtPassword.getText().trim();
+        String strSDT = txtSDT.getText().trim();
+        String strNgaySinh = txtNamSinh.getText().trim();
+        String permission = rdoNhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
+
+        // Kiểm tra định dạng số cho password và SDT
+        long password = Long.parseLong(strPassword);
+        int sdt = Integer.parseInt(strSDT);
+
+        // Kiểm tra định dạng ngày sinh: dd/MM/yyyy
+        String regex = "^\\d{2}/\\d{2}/\\d{4}$";
+        if (!strNgaySinh.matches(regex)) {
+            JOptionPane.showMessageDialog(null, "Ngày sinh không đúng định dạng (dd/MM/yyyy)");
+            return null;
+        }
+
+        // Parse ngày sinh
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date namSinh = sdf.parse(strNgaySinh);
+
+        return new NhanVienEntity(maTK, password, tenTK, email, permission, sdt, namSinh);
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Số điện thoại hoặc mật khẩu không hợp lệ (phải là số)");
+        return null;
+    } catch (ParseException e) {
+        JOptionPane.showMessageDialog(null, "Lỗi định dạng ngày sinh");
+        return null;
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Lỗi không xác định: " + e.getMessage());
+        return null;
+    }
+}
+    
+    public void setNhanVien(NhanVienEntity nv) {
+    txtMaTK.setText(String.valueOf(nv.getMaTK()));
+    txtTenTK.setText(nv.getTenTK());
+    txtEmail.setText(nv.getEmail());
+    txtPassword.setText(String.valueOf(nv.getPassword()));
+    txtSDT.setText(String.valueOf(nv.getSdt()));
+
+    // Định dạng Date -> String để set vào txtNamSinh
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    String strNgaySinh = sdf.format(nv.getNamSinh());
+    txtNamSinh.setText(strNgaySinh);
+
+    // Quyền
+    if (nv.getPermission().equalsIgnoreCase("Nhân Viên")) {
+        rdoNhanVien.setSelected(true);
+    } else {
+        rdoQuanLy.setSelected(true);
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,10 +126,10 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         txtNamSinh = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtMatKhau = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        rdNhanVien = new javax.swing.JRadioButton();
-        rdQuanLy = new javax.swing.JRadioButton();
+        rdoNhanVien = new javax.swing.JRadioButton();
+        rdoQuanLy = new javax.swing.JRadioButton();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
@@ -118,33 +184,48 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Mật Khẩu");
 
-        txtMatKhau.addActionListener(new java.awt.event.ActionListener() {
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMatKhauActionPerformed(evt);
+                txtPasswordActionPerformed(evt);
             }
         });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Quyền");
 
-        buttonGroup1.add(rdNhanVien);
-        rdNhanVien.setText("Nhân Viên");
-        rdNhanVien.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(rdoNhanVien);
+        rdoNhanVien.setText("Nhân Viên");
+        rdoNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdNhanVienActionPerformed(evt);
+                rdoNhanVienActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(rdQuanLy);
-        rdQuanLy.setText("Quản Lý");
+        buttonGroup1.add(rdoQuanLy);
+        rdoQuanLy.setText("Quản Lý");
 
         btnThem.setBackground(new java.awt.Color(0, 204, 0));
         btnThem.setText("Thêm");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
 
         btnSua.setText("Sửa");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
 
         btnXoa.setBackground(new java.awt.Color(204, 0, 0));
         btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         tblNhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -191,14 +272,14 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(txtNamSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdNhanVien)
+                        .addComponent(rdoNhanVien)
                         .addGap(18, 18, 18)
-                        .addComponent(rdQuanLy))
+                        .addComponent(rdoQuanLy))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnXoa)
                         .addGap(18, 18, 18)
@@ -243,12 +324,12 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(rdNhanVien)
-                            .addComponent(rdQuanLy))
+                            .addComponent(rdoNhanVien)
+                            .addComponent(rdoQuanLy))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -274,17 +355,57 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNamSinhActionPerformed
 
-    private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauActionPerformed
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMatKhauActionPerformed
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
-    private void rdNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdNhanVienActionPerformed
+    private void rdoNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoNhanVienActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_rdNhanVienActionPerformed
+    }//GEN-LAST:event_rdoNhanVienActionPerformed
 
     private void txtTenTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenTKActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenTKActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        NhanVienEntity nv = this.getNhanVien();
+    if (nv != null) {
+        this.dao.insert(nv); // Giả sử tkDao là đối tượng TaiKhoanNVDAO
+        JOptionPane.showMessageDialog(btnThem, "Thêm tài khoản nhân viên thành công");
+        fillTable();
+    }
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        NhanVienEntity nv = this.getNhanVien();
+    if (nv != null) {
+        this.dao.update(nv); // Gọi DAO để cập nhật
+        JOptionPane.showMessageDialog(btnSua, "Cập nhật tài khoản nhân viên thành công");
+        fillTable(); // Refresh lại bảng
+    }
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+         try {
+        if (!txtMaTK.getText().trim().isEmpty()) {
+            long maTK = Long.parseLong(txtMaTK.getText().trim());
+
+            int confirm = JOptionPane.showConfirmDialog(
+                this, "Bạn có chắc muốn xóa tài khoản này?", "Xác nhận", JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.dao.delete(maTK); // Gọi DAO xóa theo mã
+                JOptionPane.showMessageDialog(btnXoa, "Xóa tài khoản nhân viên thành công");
+                fillTable(); // Refresh lại bảng
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xóa");
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Mã tài khoản không hợp lệ");
+    }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -301,13 +422,13 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JRadioButton rdNhanVien;
-    private javax.swing.JRadioButton rdQuanLy;
+    private javax.swing.JRadioButton rdoNhanVien;
+    private javax.swing.JRadioButton rdoQuanLy;
     private javax.swing.JTable tblNhanVien;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMaTK;
-    private javax.swing.JTextField txtMatKhau;
     private javax.swing.JTextField txtNamSinh;
+    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtTenTK;
     // End of variables declaration//GEN-END:variables
