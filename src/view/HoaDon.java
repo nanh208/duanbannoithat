@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author Thinhdzaingatngay
@@ -15,6 +17,8 @@ public class HoaDon extends javax.swing.JPanel {
      */
     public HoaDon() {
         initComponents();
+                JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        add(lbl);
     }
 
     /**

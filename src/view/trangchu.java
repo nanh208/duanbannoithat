@@ -180,15 +180,14 @@ public class trangchu extends javax.swing.JFrame {
  showPanel(new Khachhang());    }//GEN-LAST:event_btnqanlyKHMouseClicked
 
     private void btlquanlysanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btlquanlysanphamMouseClicked
-        // TODO add your handling code here:
+      showPanel(new QuanLySanPham()); 
     }//GEN-LAST:event_btlquanlysanphamMouseClicked
 
     private void tblchitiensanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblchitiensanphamMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblchitiensanphamMouseClicked
+showPanel(new ChiTietSanPham());     }//GEN-LAST:event_tblchitiensanphamMouseClicked
 
     private void tblloaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblloaiMouseClicked
-        // TODO add your handling code here:
+        showPanel(new Loai());
     }//GEN-LAST:event_tblloaiMouseClicked
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked

@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author Admin
@@ -15,6 +17,8 @@ public class Vouchers extends javax.swing.JFrame {
      */
     public Vouchers() {
         initComponents();
+                JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        add(lbl);
     }
 
     /**

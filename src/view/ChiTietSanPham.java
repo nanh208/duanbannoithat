@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author nem mèn mén
@@ -15,6 +17,8 @@ public class ChiTietSanPham extends javax.swing.JPanel {
      */
     public ChiTietSanPham() {
         initComponents();
+                JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        add(lbl);
     }
 
     /**

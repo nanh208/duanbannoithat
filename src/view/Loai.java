@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author meoba
@@ -15,6 +17,8 @@ public class Loai extends javax.swing.JPanel {
      */
     public Loai() {
         initComponents();
+                JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        add(lbl);
     }
 
     /**
