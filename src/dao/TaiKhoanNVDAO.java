@@ -21,7 +21,7 @@ public class TaiKhoanNVDAO {
         List<NhanVienEntity> list = new ArrayList();
         try {
             Connection con = ConnectDB.getConnect();
-            String sql = "select * from Ban";
+            String sql = "select * from TaiKhoanNV";
             PreparedStatement statement  = con.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
@@ -36,7 +36,7 @@ public class TaiKhoanNVDAO {
             }
         } catch (Exception e) {
             
-            System.out.println("Lỗi get all Bàn" + e.getMessage());
+            System.out.println("Lỗi get all tk" + e.getMessage());
         }
         return list;
     }
