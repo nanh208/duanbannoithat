@@ -110,7 +110,7 @@ public class LoginFrame extends javax.swing.JFrame {
         btnThoat = new javax.swing.JButton();
         btnDangKy = new javax.swing.JButton();
         btnDangNhap = new javax.swing.JButton();
-        txtTenTaiKhoan1 = new javax.swing.JTextField();
+        txtMatKhau = new javax.swing.JTextField();
 
         jTextField1.setText("jTextField1");
 
@@ -141,9 +141,9 @@ public class LoginFrame extends javax.swing.JFrame {
 
         btnDangNhap.setText("Dang Nhap");
 
-        txtTenTaiKhoan1.addActionListener(new java.awt.event.ActionListener() {
+        txtMatKhau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTenTaiKhoan1ActionPerformed(evt);
+                txtMatKhauActionPerformed(evt);
             }
         });
 
@@ -167,7 +167,7 @@ public class LoginFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbLoaitaikhoan, 0, 315, Short.MAX_VALUE)
                             .addComponent(txtTenTaiKhoan)
-                            .addComponent(txtTenTaiKhoan1)))
+                            .addComponent(txtMatKhau)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(96, 96, 96)
                         .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -187,7 +187,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTenTaiKhoan1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbLoaitaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -211,9 +211,9 @@ public class LoginFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenTaiKhoanActionPerformed
 
-    private void txtTenTaiKhoan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenTaiKhoan1ActionPerformed
+    private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenTaiKhoan1ActionPerformed
+    }//GEN-LAST:event_txtMatKhauActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,7 +234,7 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtMatKhau;
     private javax.swing.JTextField txtTenTaiKhoan;
-    private javax.swing.JTextField txtTenTaiKhoan1;
     // End of variables declaration//GEN-END:variables
 }
