@@ -4,6 +4,9 @@
  */
 package view;
 
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Admin
@@ -15,8 +18,15 @@ public class trangchu extends javax.swing.JFrame {
      */
     public trangchu() {
         initComponents();
-    }
+        pnlMain.setLayout(new BorderLayout());
 
+    }
+    private void showPanel(JPanel panel) {
+        pnlMain.removeAll();
+        pnlMain.add(panel, BorderLayout.CENTER);
+        pnlMain.revalidate();
+        pnlMain.repaint();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,36 +37,88 @@ public class trangchu extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        tblquanlynhanvien = new javax.swing.JButton();
+        btnqanlyKH = new javax.swing.JButton();
+        btlquanlysanpham = new javax.swing.JButton();
+        tblchitiensanpham = new javax.swing.JButton();
+        tblloai = new javax.swing.JButton();
+        tblVouchers = new javax.swing.JButton();
+        tblkhohang = new javax.swing.JButton();
+        tblthoat = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        pnlMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 600));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
 
         jLabel1.setText("Tên");
 
-        jButton1.setText("Quản ly nhân viên");
+        tblquanlynhanvien.setText("Quản ly nhân viên");
+        tblquanlynhanvien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblquanlynhanvienMouseClicked(evt);
+            }
+        });
 
-        jButton2.setText("Quản lý khách hàng");
+        btnqanlyKH.setText("Quản lý khách hàng");
+        btnqanlyKH.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnqanlyKHMouseClicked(evt);
+            }
+        });
 
-        jButton3.setText("Quản ly sản phẩm");
+        btlquanlysanpham.setText("Quản ly sản phẩm");
+        btlquanlysanpham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btlquanlysanphamMouseClicked(evt);
+            }
+        });
 
-        jButton4.setText("Chi tiết sản phẩm");
+        tblchitiensanpham.setText("Chi tiết sản phẩm");
+        tblchitiensanpham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblchitiensanphamMouseClicked(evt);
+            }
+        });
 
-        jButton5.setText("Loại");
+        tblloai.setText("Loại");
+        tblloai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblloaiMouseClicked(evt);
+            }
+        });
 
-        jButton6.setText("Vouchers");
+        tblVouchers.setText("Vouchers");
+        tblVouchers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVouchersMouseClicked(evt);
+            }
+        });
 
-        jButton7.setText("Kho hàng");
+        tblkhohang.setText("Kho hàng");
+        tblkhohang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblkhohangMouseClicked(evt);
+            }
+        });
 
-        jButton8.setText("Thoát");
+        tblthoat.setText("Thoát");
+        tblthoat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblthoatMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
+        pnlMainLayout.setVerticalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,19 +127,20 @@ public class trangchu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton8)
-                    .addComponent(jButton7)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
+                    .addComponent(tblthoat)
+                    .addComponent(tblkhohang)
+                    .addComponent(tblVouchers)
+                    .addComponent(tblloai)
+                    .addComponent(tblchitiensanpham)
+                    .addComponent(btlquanlysanpham)
+                    .addComponent(btnqanlyKH)
+                    .addComponent(tblquanlynhanvien)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(321, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,25 +150,57 @@ public class trangchu extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(tblquanlynhanvien)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnqanlyKH)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(btlquanlysanpham)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(tblchitiensanpham)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(tblloai)
                 .addGap(18, 18, 18)
-                .addComponent(jButton6)
+                .addComponent(tblVouchers)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7)
+                .addComponent(tblkhohang)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-                .addComponent(jButton8))
+                .addComponent(tblthoat))
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tblquanlynhanvienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblquanlynhanvienMouseClicked
+            showPanel(new TaiKhoanNhanVien());
+    }//GEN-LAST:event_tblquanlynhanvienMouseClicked
+
+    private void btnqanlyKHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnqanlyKHMouseClicked
+ showPanel(new Khachhang());    }//GEN-LAST:event_btnqanlyKHMouseClicked
+
+    private void btlquanlysanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btlquanlysanphamMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btlquanlysanphamMouseClicked
+
+    private void tblchitiensanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblchitiensanphamMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblchitiensanphamMouseClicked
+
+    private void tblloaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblloaiMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblloaiMouseClicked
+
+    private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblVouchersMouseClicked
+
+    private void tblkhohangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblkhohangMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblkhohangMouseClicked
+
+    private void tblthoatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblthoatMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblthoatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -143,15 +238,16 @@ public class trangchu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
+    private javax.swing.JButton btlquanlysanpham;
+    private javax.swing.JButton btnqanlyKH;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JPanel pnlMain;
+    private javax.swing.JButton tblVouchers;
+    private javax.swing.JButton tblchitiensanpham;
+    private javax.swing.JButton tblkhohang;
+    private javax.swing.JButton tblloai;
+    private javax.swing.JButton tblquanlynhanvien;
+    private javax.swing.JButton tblthoat;
     // End of variables declaration//GEN-END:variables
 }

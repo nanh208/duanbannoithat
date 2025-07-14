@@ -9,6 +9,7 @@ import entity.KhachHangEntity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +25,8 @@ KhachHangdao_1 dao = new KhachHangdao_1();
      */
     public Khachhang() {
         initComponents();
+        JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        add(lbl);
     }
     public void fillTable(){
        DefaultTableModel model = (DefaultTableModel) tblKhachhang.getModel();
