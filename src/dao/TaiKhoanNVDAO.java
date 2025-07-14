@@ -21,12 +21,12 @@ public class TaiKhoanNVDAO {
         List<NhanVienEntity> list = new ArrayList();
         try {
             Connection con = ConnectDB.getConnect();
-            String sql = "select * from TaiKhoanNV";
+            String sql = "select * from Ban";
             PreparedStatement statement  = con.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
                 NhanVienEntity ban = new NhanVienEntity(result.getLong("maTaiKhoan"),
-                    result.getLong("password"),
+                    result.getString("password"),
                     result.getString("tenTaiKhoan"),
                     result.getString("Email"),
                     result.getString("permission"),
@@ -36,7 +36,7 @@ public class TaiKhoanNVDAO {
             }
         } catch (Exception e) {
             
-            System.out.println("Lỗi get all tk" + e.getMessage());
+            System.out.println("Lỗi get all Bàn" + e.getMessage());
         }
         return list;
     }
@@ -50,7 +50,7 @@ public class TaiKhoanNVDAO {
         statement.setLong(1, nv.getMaTK());
         statement.setString(2, nv.getTenTK());
         statement.setString(3, nv.getEmail());
-        statement.setLong(4, nv.getPassword());
+        statement.setString(4, nv.getPassword());
         statement.setDate(5, new java.sql.Date(nv.getNamSinh().getTime())); // chuyển từ java.util.Date sang java.sql.Date
         statement.setInt(6, nv.getSdt());
         statement.setString(7, nv.getPermission());
@@ -68,7 +68,7 @@ public class TaiKhoanNVDAO {
 
         statement.setString(1, nv.getTenTK());
         statement.setString(2, nv.getEmail());
-        statement.setLong(3, nv.getPassword());
+        statement.setString(3, nv.getPassword());
 
         // Chuyển java.util.Date thành java.sql.Date
         java.sql.Date sqlDate = new java.sql.Date(nv.getNamSinh().getTime());

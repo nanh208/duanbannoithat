@@ -9,7 +9,6 @@ import entity.NhanVienEntity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,12 +24,10 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
     public TaiKhoanNhanVien() {
         initComponents();
         fillTable();
-        JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
-        add(lbl);
     }
     public void fillTable() {
     DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
-    model.setRowCount(0); // Xóa các dòng cũ
+    model.setRowCount(0); 
 
     for (NhanVienEntity nv : dao.getAll()) {
         Object row[] = {
@@ -48,7 +45,6 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
     }
     public NhanVienEntity getNhanVien() {
     try {
-        // Lấy mã tài khoản
         long maTK = 1;
         if (!txtMaTK.getText().trim().isEmpty()) {
             maTK = Long.parseLong(txtMaTK.getText().trim());
@@ -56,30 +52,31 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
 
         String tenTK = txtTenTK.getText().trim();
         String email = txtEmail.getText().trim();
-        String strPassword = txtPassword.getText().trim();
-        String strSDT = txtSDT.getText().trim();
+        String password = txtPassword.getText().trim();
+
+        int sdt;
+        try {
+            sdt = Integer.parseInt(txtSDT.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ (phải là số nguyên)");
+            return null;
+        }
+
         String strNgaySinh = txtNamSinh.getText().trim();
         String permission = rdoNhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
 
-        // Kiểm tra định dạng số cho password và SDT
-        long password = Long.parseLong(strPassword);
-        int sdt = Integer.parseInt(strSDT);
-
-        // Kiểm tra định dạng ngày sinh: dd/MM/yyyy
-        String regex = "^\\d{2}/\\d{2}/\\d{4}$";
-        if (!strNgaySinh.matches(regex)) {
+        if (!strNgaySinh.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
             JOptionPane.showMessageDialog(null, "Ngày sinh không đúng định dạng (dd/MM/yyyy)");
             return null;
         }
 
-        // Parse ngày sinh
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date namSinh = sdf.parse(strNgaySinh);
 
         return new NhanVienEntity(maTK, password, tenTK, email, permission, sdt, namSinh);
 
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Số điện thoại hoặc mật khẩu không hợp lệ (phải là số)");
+        JOptionPane.showMessageDialog(null, "Mã tài khoản không hợp lệ");
         return null;
     } catch (ParseException e) {
         JOptionPane.showMessageDialog(null, "Lỗi định dạng ngày sinh");
@@ -94,16 +91,13 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
     txtMaTK.setText(String.valueOf(nv.getMaTK()));
     txtTenTK.setText(nv.getTenTK());
     txtEmail.setText(nv.getEmail());
-    txtPassword.setText(String.valueOf(nv.getPassword()));
+    txtPassword.setText(nv.getPassword());
     txtSDT.setText(String.valueOf(nv.getSdt()));
 
-    // Định dạng Date -> String để set vào txtNamSinh
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    String strNgaySinh = sdf.format(nv.getNamSinh());
-    txtNamSinh.setText(strNgaySinh);
+    txtNamSinh.setText(sdf.format(nv.getNamSinh()));
 
-    // Quyền
-    if (nv.getPermission().equalsIgnoreCase("Nhân Viên")) {
+    if ("Nhân Viên".equalsIgnoreCase(nv.getPermission())) {
         rdoNhanVien.setSelected(true);
     } else {
         rdoQuanLy.setSelected(true);
@@ -292,9 +286,9 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jLabel8)
                     .addComponent(txtTenTK, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,7 +332,7 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
                             .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -382,9 +376,9 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         NhanVienEntity nv = this.getNhanVien();
     if (nv != null) {
-        this.dao.update(nv); // Gọi DAO để cập nhật
+        this.dao.update(nv); 
         JOptionPane.showMessageDialog(btnSua, "Cập nhật tài khoản nhân viên thành công");
-        fillTable(); // Refresh lại bảng
+        fillTable(); 
     }
     }//GEN-LAST:event_btnSuaActionPerformed
 
@@ -400,7 +394,7 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
             if (confirm == JOptionPane.YES_OPTION) {
                 this.dao.delete(maTK); // Gọi DAO xóa theo mã
                 JOptionPane.showMessageDialog(btnXoa, "Xóa tài khoản nhân viên thành công");
-                fillTable(); // Refresh lại bảng
+                fillTable(); 
             }
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xóa");

@@ -11,15 +11,18 @@ import java.util.Date;
  * @author meoba
  */
 public class NhanVienEntity {
-    private long maTK, password;
-    private String tenTK, email, permission;
+    private long maTK;
+    private String password;
+    private String tenTK;
+    private String email;
+    private String permission;
     private int sdt;
     private Date namSinh;
 
     public NhanVienEntity() {
     }
 
-    public NhanVienEntity(long maTK, long password, String tenTK, String email, String permission, int sdt, Date namSinh) {
+    public NhanVienEntity(long maTK, String password, String tenTK, String email, String permission, int sdt, Date namSinh) {
         this.maTK = maTK;
         this.password = password;
         this.tenTK = tenTK;
@@ -29,7 +32,7 @@ public class NhanVienEntity {
         this.namSinh = namSinh;
     }
 
-    public NhanVienEntity(long password, String tenTK, String email, String permission, int sdt, Date namSinh) {
+    public NhanVienEntity(String password, String tenTK, String email, String permission, int sdt, Date namSinh) {
         this.password = password;
         this.tenTK = tenTK;
         this.email = email;
@@ -46,11 +49,11 @@ public class NhanVienEntity {
         this.maTK = maTK;
     }
 
-    public long getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(long password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -93,5 +96,11 @@ public class NhanVienEntity {
     public void setNamSinh(Date namSinh) {
         this.namSinh = namSinh;
     }
+
+   
+    }
     
-}
+
+    
+    
+
