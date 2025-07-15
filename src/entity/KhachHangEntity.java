@@ -4,33 +4,37 @@
  */
 package entity;
 
+import java.util.Date;
+
 /**
  *
  * @author nem mèn mén
  */
 public class KhachHangEntity {
-    private int maKH;
-    private String tenKH,diaChi,Gioitinh,NgaySinh;
+    private long MaKH;
+    private String tenKH,diaChi,matKhau,Gioitinh;
     private int sdt;
+    private Date ngaySinh;
 
-    public KhachHangEntity(int maKH, String tenKH, String diaChi, String Gioitinh, String NgaySinh, int sdt) {
-        this.maKH = maKH;
+    public KhachHangEntity(long MaKH, String tenKH, String diaChi, String matKhau, String Gioitinh, int sdt, Date ngaySinh) {
+        this.MaKH = MaKH;
         this.tenKH = tenKH;
         this.diaChi = diaChi;
+        this.matKhau = matKhau;
         this.Gioitinh = Gioitinh;
-        this.NgaySinh = NgaySinh;
         this.sdt = sdt;
+        this.ngaySinh = ngaySinh;
     }
 
     public KhachHangEntity() {
     }
 
-    public int getMaKH() {
-        return maKH;
+    public long getMaKH() {
+        return MaKH;
     }
 
-    public void setMaKH(int maKH) {
-        this.maKH = maKH;
+    public void setMaKH(long MaKH) {
+        this.MaKH = MaKH;
     }
 
     public String getTenKH() {
@@ -49,20 +53,20 @@ public class KhachHangEntity {
         this.diaChi = diaChi;
     }
 
+    public String getMatKhau() {
+        return matKhau;
+    }
+
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
+    }
+
     public String getGioitinh() {
         return Gioitinh;
     }
 
     public void setGioitinh(String Gioitinh) {
         this.Gioitinh = Gioitinh;
-    }
-
-    public String getNgaySinh() {
-        return NgaySinh;
-    }
-
-    public void setNgaySinh(String NgaySinh) {
-        this.NgaySinh = NgaySinh;
     }
 
     public int getSdt() {
@@ -72,6 +76,16 @@ public class KhachHangEntity {
     public void setSdt(int sdt) {
         this.sdt = sdt;
     }
+
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+
 
 
     

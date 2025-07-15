@@ -25,67 +25,80 @@ KhachHangdao_1 dao = new KhachHangdao_1();
      */
     public Khachhang() {
         initComponents();
-        JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        fillTable();
+        JLabel lbl = new JLabel("Đây là giao diện quản lý khách hàng");
         add(lbl);
+        
     }
     public void fillTable(){
        DefaultTableModel model = (DefaultTableModel) tblKhachhang.getModel();
        model.setRowCount(0);
-        for (KhachHangEntity kh: dao.getAll()) {
-            Object data[] = {
-            kh.getTenKH(),
+        for (KhachHangEntity kh : dao.getAll()) {
+            Object row[] = {kh.getTenKH(),
             kh.getMaKH(),
             kh.getDiaChi(),
+            kh.getMatKhau(),
             kh.getSdt(),
             kh.getNgaySinh(),
-            kh.getGioitinh()
-            };
-            model.addRow(data);
+            kh.getGioitinh()};
+            
+        model.addRow(row);
         }
         tblKhachhang.setModel(model);
     }
     public KhachHangEntity getKhachHang() {
-        try{
-            int maKH = 1;
-            if (!txtMakh.getText().isEmpty()) {
-               maKH = Integer.parseInt(txtMakh.getText());
-            }
-            String tenKH = txtTenkh.getText();
-            String diaChi = txtDiachi.getText();
-            String strsdt = txtSdt.getText();
-            String NgaySinh = txtNgaysinh.getText();
-            String gioiTinh = rdoNam.isSelected() ? "Nam" : "Nữ";
-            
-            int sdt = Integer.parseInt(strsdt);
-            
-            String regex = "^\\d{2}/\\d{2}/\\d{4}$";
-            if (!NgaySinh.matches(regex)) {
+    try {
+                long MaKH = 1;
+        if (!txtMakh.getText().trim().isEmpty()) {
+            MaKH = Long.parseLong(txtMakh.getText().trim());
+        }
+
+        String tenTK = txtTenkh.getText().trim();
+        String diaChi = txtDiachi.getText().trim();
+        String matKhau = txtMatkhau.getText().trim();
+
+        int sdt;
+        try {
+            sdt = Integer.parseInt(txtSdt.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ (phải là số nguyên)");
+            return null;
+        }
+
+        String strNgaySinh = txtNgaysinh.getText().trim();
+        String Gioitinh = rdoNam.isSelected() ? "Nam" : "Nữ";
+
+        if (!strNgaySinh.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
             JOptionPane.showMessageDialog(null, "Ngày sinh không đúng định dạng (dd/MM/yyyy)");
             return null;
         }
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      
-        
-         return new KhachHangEntity(maKH, tenKH, diaChi, gioiTinh, NgaySinh, sdt);
-    }catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Số điện thoại hoặc mã khách hàng không hợp lệ (phải là số)");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date namSinh = sdf.parse(strNgaySinh);
+
+        return new KhachHangEntity(MaKH, tenTK, diaChi, matKhau, Gioitinh, sdt, namSinh);
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Mã tài khoản không hợp lệ");
+        return null;
+    } catch (ParseException e) {
+        JOptionPane.showMessageDialog(null, "Lỗi định dạng ngày sinh");
         return null;
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Lỗi không xác định: " + e.getMessage());
         return null;
     }
-
 }
     public void setKhachhang(KhachHangEntity kh){
         txtMakh.setText(String.valueOf(kh.getMaKH()));
         txtTenkh.setText(kh.getTenKH());
         txtDiachi.setText(kh.getDiaChi());
+        txtMatkhau.setText(kh.getMatKhau());
         txtSdt.setText(String.valueOf(kh.getSdt()));
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    String NgaySinh = sdf.format(kh.getNgaySinh());
-    txtNgaysinh.setText(NgaySinh);
-    if (kh.getGioitinh().equalsIgnoreCase("Khách Hàng")) {
+     txtNgaysinh.setText(sdf.format(kh.getNgaySinh()));
+    if ("Khách Hàng".equalsIgnoreCase(kh.getGioitinh())) {
         rdoNam.setSelected(true);
     } else {
         rdoNu.setSelected(true);
@@ -101,6 +114,7 @@ KhachHangdao_1 dao = new KhachHangdao_1();
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtMakh = new javax.swing.JTextField();
@@ -120,6 +134,8 @@ KhachHangdao_1 dao = new KhachHangdao_1();
         btnSua = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKhachhang = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        txtMatkhau = new javax.swing.JTextField();
 
         setMaximumSize(new java.awt.Dimension(800, 500));
         setMinimumSize(new java.awt.Dimension(800, 500));
@@ -145,6 +161,7 @@ KhachHangdao_1 dao = new KhachHangdao_1();
 
         jLabel7.setText("Giới Tính");
 
+        buttonGroup1.add(rdoNam);
         rdoNam.setText("Nam");
         rdoNam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,6 +169,7 @@ KhachHangdao_1 dao = new KhachHangdao_1();
             }
         });
 
+        buttonGroup1.add(rdoNu);
         rdoNu.setText("Nữ");
         rdoNu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,17 +202,17 @@ KhachHangdao_1 dao = new KhachHangdao_1();
 
         tblKhachhang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã KH", "Tên ", "Địa chỉ", "SDT", "Ngày sinh", "Giới tínhl"
+                "Tên ", "Mã KH", "Địa chỉ", "Mật khẩu", "SDT", "Ngày sinh", "Giới tínhl"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                true, false, true, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -202,6 +220,8 @@ KhachHangdao_1 dao = new KhachHangdao_1();
             }
         });
         jScrollPane1.setViewportView(tblKhachhang);
+
+        jLabel8.setText("Mật khẩu");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -232,7 +252,9 @@ KhachHangdao_1 dao = new KhachHangdao_1();
                         .addGap(18, 18, 18)
                         .addComponent(btnSua)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnThem)))
+                        .addComponent(btnThem))
+                    .addComponent(jLabel8)
+                    .addComponent(txtMatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -242,7 +264,7 @@ KhachHangdao_1 dao = new KhachHangdao_1();
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
@@ -258,6 +280,10 @@ KhachHangdao_1 dao = new KhachHangdao_1();
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtDiachi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtMatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -270,7 +296,7 @@ KhachHangdao_1 dao = new KhachHangdao_1();
                             .addComponent(jLabel7)
                             .addComponent(rdoNam)
                             .addComponent(rdoNu))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -339,6 +365,7 @@ KhachHangdao_1 dao = new KhachHangdao_1();
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -346,12 +373,14 @@ KhachHangdao_1 dao = new KhachHangdao_1();
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rdoNam;
     private javax.swing.JRadioButton rdoNu;
     private javax.swing.JTable tblKhachhang;
     private javax.swing.JTextField txtDiachi;
     private javax.swing.JTextField txtMakh;
+    private javax.swing.JTextField txtMatkhau;
     private javax.swing.JTextField txtNgaysinh;
     private javax.swing.JTextField txtSdt;
     private javax.swing.JTextField txtTenkh;
