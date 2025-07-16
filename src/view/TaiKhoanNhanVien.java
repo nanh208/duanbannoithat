@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author nem mèn mén
  */
 public class TaiKhoanNhanVien extends javax.swing.JPanel {
+    int row;
     TaiKhoanNVDAO dao = new TaiKhoanNVDAO();
     /**
      * Creates new form TaiKhoanNhanVien
@@ -68,12 +69,12 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
         String strNgaySinh = txtNamSinh.getText().trim();
         String permission = rdoNhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
 
-        if (!strNgaySinh.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
-            JOptionPane.showMessageDialog(null, "Ngày sinh không đúng định dạng (dd/MM/yyyy)");
-            return null;
-        }
+        if (!strNgaySinh.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+    JOptionPane.showMessageDialog(null, "Ngày sinh không đúng định dạng (yyyy-MM-dd)");
+    return null;
+}
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date namSinh = sdf.parse(strNgaySinh);
 
         return new NhanVienEntity(maTK, password, tenTK, email, permission, sdt, namSinh);
@@ -97,7 +98,7 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
     txtPassword.setText(nv.getPassword());
     txtSDT.setText(String.valueOf(nv.getSdt()));
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     txtNamSinh.setText(sdf.format(nv.getNamSinh()));
 
     if ("Nhân Viên".equalsIgnoreCase(nv.getPermission())) {
@@ -244,6 +245,11 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblNhanVienMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblNhanVien);
@@ -404,6 +410,37 @@ public class TaiKhoanNhanVien extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Mã tài khoản không hợp lệ");
     }
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void tblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNhanVienMouseClicked
+this.row = tblNhanVien.getSelectedRow();
+    String tenTK = String.valueOf(tblNhanVien.getValueAt(this.row, 0));
+    String maTK = String.valueOf(tblNhanVien.getValueAt(this.row, 1));
+    String email = String.valueOf(tblNhanVien.getValueAt(this.row, 2));
+    String sdt = String.valueOf(tblNhanVien.getValueAt(this.row, 3));
+    String namSinhStr = String.valueOf(tblNhanVien.getValueAt(this.row, 4));
+    String password = String.valueOf(tblNhanVien.getValueAt(this.row, 5));
+    String permission = String.valueOf(tblNhanVien.getValueAt(this.row, 6));
+
+    Date namSinh = null;
+    try {
+        namSinh = new SimpleDateFormat("yyyy-MM-dd").parse(namSinhStr);
+    } catch (ParseException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Ngày sinh không hợp lệ!");
+        return; // tránh lỗi tiếp tục khi ngày sai
+    }
+
+    NhanVienEntity nv = new NhanVienEntity(
+        Long.parseLong(maTK),
+        password,
+        tenTK,
+        email,
+        permission,
+        Integer.parseInt(sdt),
+        namSinh
+    );
+    this.setNhanVien(nv);
+    }//GEN-LAST:event_tblNhanVienMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
