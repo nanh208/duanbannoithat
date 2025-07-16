@@ -29,13 +29,13 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tblthoat" min="-2" max="-2" attributes="0"/>
-                  <Component id="tblkhohang" min="-2" max="-2" attributes="0"/>
-                  <Component id="tblVouchers" min="-2" max="-2" attributes="0"/>
-                  <Component id="tblloai" min="-2" max="-2" attributes="0"/>
-                  <Component id="tblchitiensanpham" min="-2" max="-2" attributes="0"/>
-                  <Component id="btlquanlysanpham" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnqanlyKH" min="-2" max="-2" attributes="0"/>
+                  <Component id="tblthoat" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="tblkhohang" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="tblVouchers" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="tblloai" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="tblchitiensanpham" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btlquanlysanpham" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnqanlyKH" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="tblquanlynhanvien" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" pref="37" max="-2" attributes="0"/>
@@ -43,9 +43,9 @@
                       <Component id="jTextField1" min="-2" pref="110" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="pnlMain" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="37" max="32767" attributes="0"/>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -74,7 +74,10 @@
               <EmptySpace pref="64" max="32767" attributes="0"/>
               <Component id="tblthoat" min="-2" max="-2" attributes="0"/>
           </Group>
-          <Component id="pnlMain" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="pnlMain" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>

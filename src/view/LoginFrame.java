@@ -15,42 +15,32 @@ public class LoginFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null); // Căn giữa màn hình
 
         // Thiết lập giá trị cho combo box
-        cbLoaitaikhoan.setModel(new DefaultComboBoxModel<>(new String[]{"Khách Hàng", "Nhân Viên", "Chủ Cửa Hàng"}));
+        cbLoaitaikhoan.setModel(new DefaultComboBoxModel<>(new String[]{"Nhân Viên", "Quản Lý"}));
 
-        // Gắn sự kiện cho các nút
+        // Gắn sự kiện
         btnDangNhap.addActionListener(e -> dangNhap());
-        btnDangKy.addActionListener(e -> dangKy());
+        btnDangKy.addActionListener(e -> moFormDangKy());
         btnThoat.addActionListener(e -> System.exit(0));
     }
 
-    private void dangNhap() {
+       private void dangNhap() {
         String tk = txtTenTaiKhoan.getText().trim();
         String mk = new String(txtMatKhau.getPassword()).trim();
         String loai = cbLoaitaikhoan.getSelectedItem().toString();
 
         try (Connection con = ConnectDB.getConnection()) {
-            PreparedStatement stmt;
-            if (loai.equals("Khách Hàng")) {
-                stmt = con.prepareStatement("SELECT * FROM KhachHang WHERE maKhachHang=? AND ngaySinh=?");
-                stmt.setLong(1, Long.parseLong(tk));
-                stmt.setDate(2, Date.valueOf(mk));
-            } else {
-                stmt = con.prepareStatement("SELECT * FROM TaiKhoanNV WHERE maTaiKhoan=? AND password=? AND permission=?");
-                stmt.setLong(1, Long.parseLong(tk));
-                stmt.setLong(2, Long.parseLong(mk));
-                stmt.setString(3, loai.equals("Nhân Viên") ? "staff" : "admin");
-            }
+            PreparedStatement stmt = con.prepareStatement(
+                "SELECT * FROM TaiKhoanNV WHERE maTaiKhoan=? AND password=? AND permission=?"
+            );
+            stmt.setLong(1, Long.parseLong(tk));
+            stmt.setString(2, mk);
+            stmt.setString(3, loai.equals("Nhân Viên") ? "staff" : "admin");
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
-                if (loai.equals("Khách Hàng")) {
-                    new trangchu().setVisible(true);
-                } else if (loai.equals("Nhân Viên")) {
-                    new QuanLySanPham().setVisible(true);
-                } else {
-                    new MainPage().setVisible(true);
-                }
+
+                new trangchu().setVisible(true);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
@@ -60,37 +50,20 @@ public class LoginFrame extends javax.swing.JFrame {
         }
     }
 
-    private void dangKy() {
-        String tk = txtTenTaiKhoan.getText().trim();
-        String mk = new String(txtMatKhau.getPassword()).trim();
+    private void moFormDangKy() {
         String loai = cbLoaitaikhoan.getSelectedItem().toString();
-
-        try (Connection con = ConnectDB.getConnection()) {
-            PreparedStatement stmt;
-            if (loai.equals("Khách Hàng")) {
-                stmt = con.prepareStatement(
-                        "INSERT INTO KhachHang (maKhachHang, tenKhachHang, diaChi, SDT, ngaySinh, gioiTinh) VALUES (?, 'Mặc định', 'Mặc định', 0, ?, 1)");
-                stmt.setLong(1, Long.parseLong(tk));
-                stmt.setDate(2, Date.valueOf(mk));
-            } else {
-                stmt = con.prepareStatement(
-                        "INSERT INTO TaiKhoanNV (maTaiKhoan, Email, password, namSinh, SDT, permission) VALUES (?, '', ?, CURRENT_DATE, 0, ?)");
-                stmt.setLong(1, Long.parseLong(tk));
-                stmt.setString(2, mk);
-                stmt.setString(3, loai.equals("Nhân Viên") ? "staff" : "admin");
-            }
-
-            int rows = stmt.executeUpdate();
-            if (rows > 0) {
-                JOptionPane.showMessageDialog(this, "Đăng ký thành công!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Đăng ký thất bại!");
-            }
-        } catch (SQLIntegrityConstraintViolationException ex) {
-            JOptionPane.showMessageDialog(this, "Tài khoản đã tồn tại");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        if (loai.equals("Nhân Viên")) {
+            new dangkynhanvien().setVisible(true);
+        } else if (loai.equals("Quản Lý")) {
+            new dangkyquamly().setVisible(true);
         }
+        dispose(); // Tắt LoginFrame nếu cần
+    }
+
+    // ... initComponents giữ nguyên như cũ
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,7 +95,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabel3.setText("Loại Tai Khoan");
 
-        cbLoaitaikhoan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân Viên", "Chủ Cửa Hàng" }));
+        cbLoaitaikhoan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân Viên", "Quản Lý" }));
 
         txtTenTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,8 +113,6 @@ public class LoginFrame extends javax.swing.JFrame {
         });
 
         btnDangNhap.setText("Dang Nhap");
-
-        txtMatKhau.setText("jPasswordField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,7 +171,7 @@ public class LoginFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
-        // TODO add your handling code here:
+         
     }//GEN-LAST:event_btnDangKyActionPerformed
 
     private void txtTenTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenTaiKhoanActionPerformed
@@ -210,12 +181,6 @@ public class LoginFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-    // ... (Giữ nguyên phần cấu hình Look and Feel ở đây, nếu có) ...
-
-    // Chỉ cần một lệnh gọi này là đủ
-    java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangKy;
