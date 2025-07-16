@@ -24,31 +24,32 @@ public class LoginFrame extends javax.swing.JFrame {
     }
 
        private void dangNhap() {
-        String tk = txtTenTaiKhoan.getText().trim();
-        String mk = new String(txtMatKhau.getPassword()).trim();
-        String loai = cbLoaitaikhoan.getSelectedItem().toString();
+    String tk = txtTenTaiKhoan.getText().trim();
+    String mk = new String(txtMatKhau.getPassword()).trim();
+    String loai = cbLoaitaikhoan.getSelectedItem().toString();
 
-        try (Connection con = ConnectDB.getConnection()) {
-            PreparedStatement stmt = con.prepareStatement(
-                "SELECT * FROM TaiKhoanNV WHERE maTaiKhoan=? AND password=? AND permission=?"
-            );
-            stmt.setLong(1, Long.parseLong(tk));
-            stmt.setString(2, mk);
-            stmt.setString(3, loai.equals("Nhân Viên") ? "staff" : "admin");
+    try (Connection con = ConnectDB.getConnection()) {
+        PreparedStatement stmt = con.prepareStatement(
+            "SELECT * FROM ChiTietNhanVien WHERE maNhanVien=? AND matKhau=? AND permission=?"
+        );
+        stmt.setLong(1, Long.parseLong(tk));
+        stmt.setString(2, mk);
+        stmt.setString(3, loai.equals("Nhân Viên") ? "staff" : "admin");
 
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
 
-                new trangchu().setVisible(true);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+            // ✅ Gọi form trang chủ và truyền mã nhân viên (hoặc tên nhân viên)
+            new trangchu(tk).setVisible(true);
+            dispose(); // Đóng form login
+        } else {
+            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
     }
+}
 
     private void moFormDangKy() {
         String loai = cbLoaitaikhoan.getSelectedItem().toString();

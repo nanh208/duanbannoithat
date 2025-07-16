@@ -16,12 +16,11 @@ public class trangchu extends javax.swing.JFrame {
     /**
      * Creates new form trangchu
      */
-    public trangchu() {
-        initComponents();
-        pnlMain.setLayout(new BorderLayout());
-        
-
-    }
+   public trangchu(String tenTaiKhoan) {
+    initComponents();
+    pnlMain.setLayout(new BorderLayout());
+    tenNguoiDung.setText(tenTaiKhoan); // Hiển thị lên giao diện
+}
     private void showPanel(JPanel panel) {
         pnlMain.removeAll();
         pnlMain.add(panel, BorderLayout.CENTER);
@@ -46,7 +45,7 @@ public class trangchu extends javax.swing.JFrame {
         tblVouchers = new javax.swing.JButton();
         tblkhohang = new javax.swing.JButton();
         tblthoat = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        tenNguoiDung = new javax.swing.JTextField();
         pnlMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -139,7 +138,7 @@ public class trangchu extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tenNguoiDung, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(31, Short.MAX_VALUE))
@@ -150,7 +149,7 @@ public class trangchu extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tenNguoiDung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(tblquanlynhanvien)
                 .addGap(18, 18, 18)
@@ -244,7 +243,6 @@ showPanel(new ChiTietSanPham());     }//GEN-LAST:event_tblchitiensanphamMouseCli
     private javax.swing.JButton btlquanlysanpham;
     private javax.swing.JButton btnqanlyKH;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JButton tblVouchers;
     private javax.swing.JButton tblchitiensanpham;
@@ -252,5 +250,6 @@ showPanel(new ChiTietSanPham());     }//GEN-LAST:event_tblchitiensanphamMouseCli
     private javax.swing.JButton tblloai;
     private javax.swing.JButton tblquanlynhanvien;
     private javax.swing.JButton tblthoat;
+    private javax.swing.JTextField tenNguoiDung;
     // End of variables declaration//GEN-END:variables
 }
