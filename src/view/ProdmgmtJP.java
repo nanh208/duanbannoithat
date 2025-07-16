@@ -8,12 +8,12 @@ package view;
  *
  * @author meoba
  */
-public class QuanLySanPham extends javax.swing.JPanel {
+public class ProdmgmtJP extends javax.swing.JPanel {
 
     /**
      * Creates new form QuanLySanPham
      */
-    public QuanLySanPham() {
+    public ProdmgmtJP() {
         initComponents();
     }
 

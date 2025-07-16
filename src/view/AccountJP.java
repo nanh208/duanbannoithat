@@ -17,13 +17,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author nem mèn mén
  */
-public class TaiKhoanNhanVien extends javax.swing.JPanel {
+public class AccountJP extends javax.swing.JPanel {
     int row;
     TaiKhoanNVDAO dao = new TaiKhoanNVDAO();
     /**
      * Creates new form TaiKhoanNhanVien
      */
-    public TaiKhoanNhanVien() {
+    public AccountJP() {
         initComponents();
         fillTable();
         JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");

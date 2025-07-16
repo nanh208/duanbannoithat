@@ -8,12 +8,12 @@ package view;
  *
  * @author Thinhdzaingatngay
  */
-public class HoaDon extends javax.swing.JPanel {
+public class ReceiptJP extends javax.swing.JPanel {
 
     /**
      * Creates new form HoaDon
      */
-    public HoaDon() {
+    public ReceiptJP() {
         initComponents();
     }
 

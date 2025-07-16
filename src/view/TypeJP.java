@@ -8,12 +8,12 @@ package view;
  *
  * @author meoba
  */
-public class Loai extends javax.swing.JPanel {
+public class TypeJP extends javax.swing.JPanel {
 
     /**
      * Creates new form Loai
      */
-    public Loai() {
+    public TypeJP() {
         initComponents();
     }
 

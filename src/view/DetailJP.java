@@ -8,12 +8,12 @@ package view;
  *
  * @author nem mèn mén
  */
-public class ChiTietSanPham extends javax.swing.JPanel {
+public class DetailJP extends javax.swing.JPanel {
 
     /**
      * Creates new form ChiTietSanPham
      */
-    public ChiTietSanPham() {
+    public DetailJP() {
         initComponents();
     }
 
