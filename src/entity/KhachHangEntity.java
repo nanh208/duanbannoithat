@@ -12,15 +12,14 @@ import java.util.Date;
  */
 public class KhachHangEntity {
     private long MaKH;
-    private String tenKH,diaChi,matKhau,Gioitinh;
+    private String tenKH,diaChi,Gioitinh;
     private int sdt;
     private Date ngaySinh;
 
-    public KhachHangEntity(long MaKH, String tenKH, String diaChi, String matKhau, String Gioitinh, int sdt, Date ngaySinh) {
+    public KhachHangEntity(long MaKH, String tenKH, String diaChi, String Gioitinh, int sdt, Date ngaySinh) {
         this.MaKH = MaKH;
         this.tenKH = tenKH;
         this.diaChi = diaChi;
-        this.matKhau = matKhau;
         this.Gioitinh = Gioitinh;
         this.sdt = sdt;
         this.ngaySinh = ngaySinh;
@@ -53,14 +52,6 @@ public class KhachHangEntity {
         this.diaChi = diaChi;
     }
 
-    public String getMatKhau() {
-        return matKhau;
-    }
-
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-
     public String getGioitinh() {
         return Gioitinh;
     }
@@ -84,6 +75,8 @@ public class KhachHangEntity {
     public void setNgaySinh(Date ngaySinh) {
         this.ngaySinh = ngaySinh;
     }
+
+   
 
 
 

@@ -27,11 +27,10 @@ public class KhachHangdao_1 {
             while(result.next()){
                 KhachHangEntity khachhang = new KhachHangEntity(result.getLong("maKhachHang"),
                         result.getString("tenKhachHang"),
-                        result.getNString("diaChi"),
-                        result.getString("maKhau"),
+                        result.getString("diaChi"),
                         result.getString("gioiTinh"),
                         result.getInt("SDT"),
-                result.getDate("ngaySInh"));
+                        result.getDate("ngaySInh"));
                 List.add(khachhang);
             }
         } catch(Exception e ){
@@ -42,17 +41,16 @@ public class KhachHangdao_1 {
     public void update(KhachHangEntity kh){
         try{
             Connection con = ConnectDB.getConnect();
-            String sql = "update KhachHang set tenKhachHang = ?, diaChi= ?,maKhau = ?," 
+            String sql = "update KhachHang set tenKhachHang = ?, diaChi= ?," 
                     + "SDT = ?,ngaySInh = ?, gioiTinh = ? where maKhachHang = ?  ";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, kh.getTenKH());
             statement.setString(2, kh.getDiaChi());
-            statement.setString(3, kh.getMatKhau());
-            statement.setInt(4, kh.getSdt());
+            statement.setInt(3, kh.getSdt());
             java.sql.Date sqlDate = new java.sql.Date(kh.getNgaySinh().getTime());
-            statement.setDate(5, sqlDate);
-            statement.setString(6, kh.getGioitinh());
-            statement.setLong(7, kh.getMaKH());
+            statement.setDate(4, sqlDate);
+            statement.setString(5, kh.getGioitinh());
+            statement.setLong(6, kh.getMaKH());
             
             statement.execute();
             
@@ -75,16 +73,15 @@ public class KhachHangdao_1 {
     public void insert (KhachHangEntity kh){
         try{
             Connection con = ConnectDB.getConnect();
-            String sql = "INSERT INTO KhachHang (maKhachHang, tenKhachHang,diaChi,maKhau, SDT, ngaySInh, gioiTinh)" 
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO KhachHang (maKhachHang, tenKhachHang,diaChi, SDT, ngaySInh, gioiTinh)" 
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setLong(1, kh.getMaKH());
             statement.setString(2, kh.getTenKH());
             statement.setString(3, kh.getDiaChi());
-            statement.setString(4, kh.getMatKhau());
-            statement.setInt(5, kh.getSdt());
-            statement.setDate(6, new java.sql.Date(kh.getNgaySinh().getTime()));
-            statement.setString(7, kh.getGioitinh());
+            statement.setInt(4, kh.getSdt());
+            statement.setDate(5, new java.sql.Date(kh.getNgaySinh().getTime()));
+            statement.setString(6, kh.getGioitinh());
             statement.executeUpdate();
             
         }catch(Exception e) {
