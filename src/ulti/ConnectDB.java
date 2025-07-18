@@ -18,9 +18,9 @@ public class ConnectDB {
                 + "encrypt=true;trustServerCertificate=true";
         try {
             con = DriverManager.getConnection(strDbUrl);
-            System.out.println("Ket Noi Thanh Cong");
+            System.out.println("Connection Successful.");
         } catch (SQLException e) {
-            System.out.println("Connect Loi: " + e);
+            System.out.println("Connection Error.: " + e);
         }
         return con;
     }
@@ -31,4 +31,6 @@ public class ConnectDB {
     public static Connection getConnection() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    
 }
