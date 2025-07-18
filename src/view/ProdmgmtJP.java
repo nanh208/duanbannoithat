@@ -10,12 +10,12 @@ import javax.swing.JLabel;
  *
  * @author meoba
  */
-public class QuanLySanPham extends javax.swing.JPanel {
+public class ProdmgmtJP extends javax.swing.JPanel {
 
     /**
      * Creates new form QuanLySanPham
      */
-    public QuanLySanPham() {
+    public ProdmgmtJP() {
         initComponents();
                 JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
         add(lbl);

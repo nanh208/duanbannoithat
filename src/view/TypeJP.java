@@ -10,12 +10,12 @@ import javax.swing.JLabel;
  *
  * @author meoba
  */
-public class Loai extends javax.swing.JPanel {
+public class TypeJP extends javax.swing.JPanel {
 
     /**
      * Creates new form Loai
      */
-    public Loai() {
+    public TypeJP() {
         initComponents();
                 JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
         add(lbl);

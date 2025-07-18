@@ -8,12 +8,12 @@ package view;
  *
  * @author Koreka
  */
-public class MainPage extends javax.swing.JPanel {
+public class DashboardJP extends javax.swing.JPanel {
 
     /**
      * Creates new form MainPage
      */
-    public MainPage() {
+    public DashboardJP() {
         initComponents();
     }
 
