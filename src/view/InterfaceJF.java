@@ -26,7 +26,6 @@ public class InterfaceJF extends javax.swing.JFrame {
     private void showPanel(JPanel panel) {
         pnlMain.removeAll();
         pnlMain.add(panel, BorderLayout.CENTER);
-        pnlMain.setLayout(new BorderLayout());
         pnlMain.revalidate();
         pnlMain.repaint();
     }
@@ -70,7 +69,9 @@ public class InterfaceJF extends javax.swing.JFrame {
         connectStatus = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setMaximumSize(new java.awt.Dimension(1200, 600));
+        setMinimumSize(new java.awt.Dimension(1200, 600));
+        setPreferredSize(new java.awt.Dimension(1200, 600));
         setResizable(false);
 
         QLKHbtn.setText("Quản Lý Khách Hàng");
