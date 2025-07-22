@@ -73,15 +73,14 @@ public class KhachHangdao_1 {
     public void insert (KhachHangEntity kh){
         try{
             Connection con = ConnectDB.getConnect();
-            String sql = "INSERT INTO KhachHang (maKhachHang, tenKhachHang,diaChi, SDT, ngaySInh, gioiTinh)" 
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO KhachHang (tenKhachHang,diaChi, SDT, ngaySInh, gioiTinh)" 
+                    + "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setLong(1, kh.getMaKH());
-            statement.setString(2, kh.getTenKH());
-            statement.setString(3, kh.getDiaChi());
-            statement.setInt(4, kh.getSdt());
-            statement.setDate(5, new java.sql.Date(kh.getNgaySinh().getTime()));
-            statement.setString(6, kh.getGioitinh());
+            statement.setString(1, kh.getTenKH());
+            statement.setString(2, kh.getDiaChi());
+            statement.setInt(3, kh.getSdt());
+            statement.setDate(4, new java.sql.Date(kh.getNgaySinh().getTime()));
+            statement.setString(5, kh.getGioitinh());
             statement.executeUpdate();
             
         }catch(Exception e) {

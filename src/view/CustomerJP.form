@@ -65,8 +65,6 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="rdoNu" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtMatkhau" alignment="0" min="-2" pref="250" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -82,7 +80,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="488" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -98,10 +96,6 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtDiachi" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtMatkhau" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtSdt" min="-2" max="-2" attributes="0"/>
@@ -115,7 +109,7 @@
                           <Component id="rdoNam" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="rdoNu" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnThem" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                           <Component id="btnXoa" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
@@ -250,11 +244,10 @@
         <Component class="javax.swing.JTable" name="tblKhachhang">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="7" rowCount="4">
+              <Table columnCount="6" rowCount="4">
                 <Column editable="false" title="T&#xea;n " type="java.lang.Object"/>
                 <Column editable="false" title="M&#xe3; KH" type="java.lang.Object"/>
                 <Column editable="false" title="&#x110;&#x1ecb;a ch&#x1ec9;" type="java.lang.Object"/>
-                <Column editable="false" title="M&#x1ead;t kh&#x1ea9;u" type="java.lang.Object"/>
                 <Column editable="false" title="SDT" type="java.lang.Object"/>
                 <Column editable="true" title="Ng&#xe0;y sinh" type="java.lang.Object"/>
                 <Column editable="false" title="Gi&#x1edb;i t&#xed;nh" type="java.lang.Object"/>
@@ -292,26 +285,17 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
               </TableColumnModel>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblKhachhangMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel8">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="M&#x1ead;t kh&#x1ea9;u"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtMatkhau">
-    </Component>
   </SubComponents>
 </Form>

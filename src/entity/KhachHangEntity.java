@@ -25,8 +25,14 @@ public class KhachHangEntity {
         this.ngaySinh = ngaySinh;
     }
 
-    public KhachHangEntity() {
+    public KhachHangEntity(String tenKH, String diaChi, String Gioitinh, int sdt, Date ngaySinh) {
+        this.tenKH = tenKH;
+        this.diaChi = diaChi;
+        this.Gioitinh = Gioitinh;
+        this.sdt = sdt;
+        this.ngaySinh = ngaySinh;
     }
+
 
     public long getMaKH() {
         return MaKH;
