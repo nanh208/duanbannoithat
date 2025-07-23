@@ -247,11 +247,11 @@ public class InterfaceJF extends javax.swing.JFrame {
     }//GEN-LAST:event_btlquanlysanphamMouseClicked
 
     private void tblchitiensanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblchitiensanphamMouseClicked
-        // TODO add your handling code here:
+        showPanel(new DetailJP());
     }//GEN-LAST:event_tblchitiensanphamMouseClicked
 
     private void tblloaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblloaiMouseClicked
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_tblloaiMouseClicked
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
