@@ -256,6 +256,13 @@ public class InterfaceJF extends javax.swing.JFrame {
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
         // TODO add your handling code here:
+        boolean connectionState = connectToDB();
+        if (connectionState == false) {
+            JOptionPane.showMessageDialog(rootPane, "Kết nối đến dữ liệu thất bại.");
+        }
+        else {
+            showPanel(new VoucherJP());
+        }
     }//GEN-LAST:event_tblVouchersMouseClicked
 
     private void tblkhohangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblkhohangMouseClicked

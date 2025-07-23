@@ -344,7 +344,7 @@ int row;
 
             if (confirm == JOptionPane.YES_OPTION) {
                 this.dao.delete(maKH); 
-                JOptionPane.showMessageDialog(btnXoa, "Xóa tài khoản nhân viên thành công");
+                JOptionPane.showMessageDialog(btnXoa, "Xóa khách hàng thành công");
                 fillTable(); 
             }
         } else {
@@ -360,8 +360,8 @@ int row;
         KhachHangEntity kh = this.getKhachHang();
     if (kh != null) {
         this.dao.update(kh); 
-        JOptionPane.showMessageDialog(btnSua, "Cập nhật tài khoản nhân viên thành công");
-        fillTable(); 
+        JOptionPane.showMessageDialog(btnSua, "Cập nhật Khách hàng thành công");
+        fillTable();
     }
     }//GEN-LAST:event_btnSuaActionPerformed
 
