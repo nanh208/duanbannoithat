@@ -25,7 +25,7 @@ public class LoginFrame extends javax.swing.JFrame {
     String tk = txtTenTaiKhoan.getText().trim();
     String mk = new String(txtMatKhau.getPassword()).trim();
 
-    try (Connection con = ConnectDB.getConnection()) {
+    try (Connection con = ConnectDB.getConnect()) {
         PreparedStatement stmt = con.prepareStatement(
             "SELECT * FROM ChiTietNhanVien WHERE maNhanVien=? AND matKhau=?"
         );
@@ -36,7 +36,7 @@ public class LoginFrame extends javax.swing.JFrame {
         if (rs.next()) {
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
 
-            // ✅ Gọi form trang chủ và truyền mã nhân viên (hoặc tên nhân viên)
+          
             new InterfaceJF().setVisible(true);
             dispose(); // Đóng form login
         } else {
@@ -102,10 +102,13 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(54, 54, 54)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(50, 50, 50)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtTenTaiKhoan)
                             .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
