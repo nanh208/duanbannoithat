@@ -43,17 +43,15 @@ public class TaiKhoanNVDAO {
         public void insert(NhanVienEntity nv) {
     try {
         Connection con = ConnectDB.getConnect();
-        String sql = "INSERT INTO TaiKhoanNV (maTaiKhoan, tenTaiKhoan, Email, password, namSinh, SDT, permission) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TaiKhoanNV (tenTaiKhoan, Email, password, namSinh, SDT, permission) "
+                   + "VALUES ( ?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = con.prepareStatement(sql);
-
-        statement.setLong(1, nv.getMaTK());
-        statement.setString(2, nv.getTenTK());
-        statement.setString(3, nv.getEmail());
-        statement.setString(4, nv.getPassword());
-        statement.setDate(5, new java.sql.Date(nv.getNamSinh().getTime())); // chuyển từ java.util.Date sang java.sql.Date
-        statement.setInt(6, nv.getSdt());
-        statement.setString(7, nv.getPermission());
+        statement.setString(1, nv.getTenTK());
+        statement.setString(2, nv.getEmail());
+        statement.setString(3, nv.getPassword());
+        statement.setDate(4, new java.sql.Date(nv.getNamSinh().getTime())); // chuyển từ java.util.Date sang java.sql.Date
+        statement.setInt(5, nv.getSdt());
+        statement.setString(6, nv.getPermission());
 
         statement.executeUpdate();
     } catch (Exception e) {
