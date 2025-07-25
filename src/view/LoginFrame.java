@@ -85,6 +85,11 @@ public class LoginFrame extends javax.swing.JFrame {
         });
 
         btnThoat.setText("Thoát");
+        btnThoat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThoatActionPerformed(evt);
+            }
+        });
 
         btnDangKy.setText("Đăng Ký");
         btnDangKy.addActionListener(new java.awt.event.ActionListener() {
@@ -150,6 +155,10 @@ public class LoginFrame extends javax.swing.JFrame {
     private void txtTenTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenTaiKhoanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenTaiKhoanActionPerformed
+
+    private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnThoatActionPerformed
 
     /**
      * @param args the command line arguments

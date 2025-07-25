@@ -4,23 +4,127 @@
  */
 package view;
 
+import dao.LoaiDAO;
+import entity.LoaiEntity;
+import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author meoba
  */
 public class TypeJP extends javax.swing.JPanel {
-
-    /**
-     * Creates new form Loai
-     */
+   LoaiDAO dao = new LoaiDAO();
+   int row;
+   
     public TypeJP() {
         initComponents();
                 JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
         add(lbl);
+        fillTable();
     }
+    public void fillTable() {
+        DefaultTableModel model = (DefaultTableModel) tblLoai.getModel();
+        model.setRowCount(0);
+        
+        List<LoaiEntity> list = dao.getAll();
+        for (LoaiEntity loai : list) {
+            Object[] row = {
+                loai.getMaLoai(),
+                loai.getTen(),
+                loai.getLoaiSP()
+            };
+            model.addRow(row);
+        }
+    }
+    public LoaiEntity getForm() {
+        try {
+            long maLoai = 0;
+            if(!txtMaLoai.getText().trim().isEmpty()) {
+                maLoai = Long.parseLong(txtMaLoai.getText().trim());
+            }
+            
+            String ten   = txtTen.getText().trim();
+            String loaiSP = txtLoaiSP.getText().trim();
+            
+            if (ten.isEmpty() || loaiSP.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Đầy Đủ Thông Tin");
+                return null;
+            }
+            
+            return new LoaiEntity(maLoai, ten, loaiSP);
+        } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Mã loại phải là số");
+                return null;
+        }
+    }
+    
+     public void setForm(LoaiEntity loai) {
+        txtMaLoai.setText(String.valueOf(loai.getMaLoai()));
+        txtTen.setText(loai.getTen());
+        txtLoaiSP.setText(loai.getLoaiSP());
+    }
+     
+    private void clearForm() {
+        txtMaLoai.setText("");
+        txtTen.setText("");
+        txtLoaiSP.setText("");
+    }
+    
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
+        LoaiEntity loai = getForm();
+        if (loai != null) {
+            dao.insert(loai);
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+            fillTable();
+            clearForm();
+        }
+    }
+    
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {
+        LoaiEntity loai = getForm();
+        if (loai != null) {
+            dao.update(loai);
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+            fillTable();
+        }
+    }
+    
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            if (txtMaLoai.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng để xóa");
+                return;
+            }
 
+            long maLoai = Long.parseLong(txtMaLoai.getText().trim());
+
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                dao.delete(maLoai);
+                JOptionPane.showMessageDialog(this, "Xóa thành công");
+                fillTable();
+                clearForm();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi xóa: " + e.getMessage());
+        }
+    }
+    
+    private void tblLoaiMouseClicked(java.awt.event.MouseEvent evt) {
+        this.row = tblLoai.getSelectedRow();
+        long maLoai = Long.parseLong(tblLoai.getValueAt(row, 0).toString());
+        String ten = tblLoai.getValueAt(row, 1).toString();
+        String loaiSP = tblLoai.getValueAt(row, 2).toString();
+
+        LoaiEntity loai = new LoaiEntity(maLoai, ten, loaiSP);
+        setForm(loai);
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,16 +137,16 @@ public class TypeJP extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtMaLoai = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblLoai = new javax.swing.JTable();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
         jToggleButton3 = new javax.swing.JToggleButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtTen = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtLoaiSP = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -63,16 +167,16 @@ public class TypeJP extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Mã Loại");
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtMaLoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaLoai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtMaLoaiActionPerformed(evt);
             }
         });
 
-        jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblLoai.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        tblLoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tblLoai.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -91,11 +195,11 @@ public class TypeJP extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        jScrollPane1.setViewportView(tblLoai);
+        if (tblLoai.getColumnModel().getColumnCount() > 0) {
+            tblLoai.getColumnModel().getColumn(0).setResizable(false);
+            tblLoai.getColumnModel().getColumn(1).setResizable(false);
+            tblLoai.getColumnModel().getColumn(2).setResizable(false);
         }
 
         jToggleButton1.setBackground(new java.awt.Color(51, 204, 0));
@@ -114,20 +218,20 @@ public class TypeJP extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Tên");
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        txtTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                txtTenActionPerformed(evt);
             }
         });
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("Loại sản phẩm");
 
-        jTextField5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        txtLoaiSP.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtLoaiSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                txtLoaiSPActionPerformed(evt);
             }
         });
 
@@ -145,11 +249,11 @@ public class TypeJP extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel2)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtMaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel4)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel6)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtLoaiSP, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -175,15 +279,15 @@ public class TypeJP extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtLoaiSP, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -194,25 +298,25 @@ public class TypeJP extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtMaLoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaLoaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtMaLoaiActionPerformed
 
     private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jToggleButton3ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void txtTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_txtTenActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void txtLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoaiSPActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_txtLoaiSPActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -222,13 +326,13 @@ public class TypeJP extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
+    private javax.swing.JTable tblLoai;
+    private javax.swing.JTextField txtLoaiSP;
+    private javax.swing.JTextField txtMaLoai;
+    private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
 }

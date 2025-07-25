@@ -20,7 +20,6 @@ public class InterfaceJF extends javax.swing.JFrame {
     public InterfaceJF() {
         initComponents();
         pnlMain.setLayout(new BorderLayout());
-
     }
 
     private void showPanel(JPanel panel) {
@@ -271,7 +270,7 @@ public class InterfaceJF extends javax.swing.JFrame {
     }//GEN-LAST:event_tblchitiensanphamMouseClicked
 
     private void tblloaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblloaiMouseClicked
-        
+         showPanel(new TypeJP());
     }//GEN-LAST:event_tblloaiMouseClicked
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
@@ -308,15 +307,20 @@ public class InterfaceJF extends javax.swing.JFrame {
     private void tblchitiensanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblchitiensanphamActionPerformed
 showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
 
-    private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
-showPanel(new DetailJP());    }//GEN-LAST:event_tblloaiActionPerformed
-
     private void btlquanlysanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlquanlysanphamActionPerformed
 showPanel(new ProdmgmtJP());    }//GEN-LAST:event_btlquanlysanphamActionPerformed
 
     private void tblthoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblthoatActionPerformed
-        // TODO add your handling code here:
+         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        this.dispose(); // Đóng InterfaceJF
+        new LoginFrame().setVisible(true); // Mở lại giao diện đăng nhập
+    }
     }//GEN-LAST:event_tblthoatActionPerformed
+
+    private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblloaiActionPerformed
 
     /**
      * @param args the command line arguments
