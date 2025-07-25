@@ -88,11 +88,16 @@ public class InterfaceJF extends javax.swing.JFrame {
             }
         });
 
-        btlquanlysanpham.setText("Quản ly sản phẩm");
+        btlquanlysanpham.setText("Bán hàng");
         btlquanlysanpham.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btlquanlysanpham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btlquanlysanphamMouseClicked(evt);
+            }
+        });
+        btlquanlysanpham.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlquanlysanphamActionPerformed(evt);
             }
         });
 
@@ -142,6 +147,11 @@ public class InterfaceJF extends javax.swing.JFrame {
         tblthoat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblthoatMouseClicked(evt);
+            }
+        });
+        tblthoat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tblthoatActionPerformed(evt);
             }
         });
 
@@ -300,6 +310,13 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
 
     private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
 showPanel(new DetailJP());    }//GEN-LAST:event_tblloaiActionPerformed
+
+    private void btlquanlysanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlquanlysanphamActionPerformed
+showPanel(new ProdmgmtJP());    }//GEN-LAST:event_btlquanlysanphamActionPerformed
+
+    private void tblthoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblthoatActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblthoatActionPerformed
 
     /**
      * @param args the command line arguments

@@ -27,7 +27,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     try (Connection con = ConnectDB.getConnect()) {
         PreparedStatement stmt = con.prepareStatement(
-            "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?"
+            "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?  "
         );
         stmt.setString(1, tk);
         stmt.setString(2, mk);
