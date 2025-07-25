@@ -116,6 +116,11 @@ public class InterfaceJF extends javax.swing.JFrame {
                 tblloaiMouseClicked(evt);
             }
         });
+        tblloai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tblloaiActionPerformed(evt);
+            }
+        });
 
         tblVouchers.setText("Vouchers");
         tblVouchers.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -292,6 +297,9 @@ public class InterfaceJF extends javax.swing.JFrame {
 
     private void tblchitiensanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblchitiensanphamActionPerformed
 showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
+
+    private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
+showPanel(new DetailJP());    }//GEN-LAST:event_tblloaiActionPerformed
 
     /**
      * @param args the command line arguments
