@@ -26,7 +26,6 @@ public class InterfaceJF extends javax.swing.JFrame {
     private void showPanel(JPanel panel) {
         pnlMain.removeAll();
         pnlMain.add(panel, BorderLayout.CENTER);
-        pnlMain.setLayout(new BorderLayout());
         pnlMain.revalidate();
         pnlMain.repaint();
     }
@@ -70,7 +69,9 @@ public class InterfaceJF extends javax.swing.JFrame {
         connectStatus = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setMaximumSize(new java.awt.Dimension(1200, 600));
+        setMinimumSize(new java.awt.Dimension(1200, 600));
+        setPreferredSize(new java.awt.Dimension(1200, 600));
         setResizable(false);
 
         QLKHbtn.setText("Quản Lý Khách Hàng");
@@ -102,12 +103,22 @@ public class InterfaceJF extends javax.swing.JFrame {
                 tblchitiensanphamMouseClicked(evt);
             }
         });
+        tblchitiensanpham.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tblchitiensanphamActionPerformed(evt);
+            }
+        });
 
         tblloai.setText("Loại");
         tblloai.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         tblloai.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblloaiMouseClicked(evt);
+            }
+        });
+        tblloai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tblloaiActionPerformed(evt);
             }
         });
 
@@ -246,15 +257,22 @@ public class InterfaceJF extends javax.swing.JFrame {
     }//GEN-LAST:event_btlquanlysanphamMouseClicked
 
     private void tblchitiensanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblchitiensanphamMouseClicked
-        // TODO add your handling code here:
+        showPanel(new DetailJP());
     }//GEN-LAST:event_tblchitiensanphamMouseClicked
 
     private void tblloaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblloaiMouseClicked
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_tblloaiMouseClicked
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
         // TODO add your handling code here:
+        boolean connectionState = connectToDB();
+        if (connectionState == false) {
+            JOptionPane.showMessageDialog(rootPane, "Kết nối đến dữ liệu thất bại.");
+        }
+        else {
+            showPanel(new VoucherJP());
+        }
     }//GEN-LAST:event_tblVouchersMouseClicked
 
     private void tblkhohangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblkhohangMouseClicked
@@ -276,6 +294,12 @@ public class InterfaceJF extends javax.swing.JFrame {
     private void QLNVbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QLNVbtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_QLNVbtnActionPerformed
+
+    private void tblchitiensanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblchitiensanphamActionPerformed
+showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
+
+    private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
+showPanel(new DetailJP());    }//GEN-LAST:event_tblloaiActionPerformed
 
     /**
      * @param args the command line arguments
