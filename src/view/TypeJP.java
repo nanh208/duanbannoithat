@@ -204,6 +204,11 @@ public class TypeJP extends javax.swing.JPanel {
 
         jToggleButton1.setBackground(new java.awt.Color(51, 204, 0));
         jToggleButton1.setText("Thêm");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         jToggleButton2.setText("Sửa");
 
@@ -317,6 +322,10 @@ public class TypeJP extends javax.swing.JPanel {
     private void txtLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoaiSPActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLoaiSPActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
