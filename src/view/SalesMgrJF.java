@@ -9,11 +9,12 @@ import javax.swing.*;
 public class SalesMgrJF extends javax.swing.JFrame {
     
     private String username;
-
+    private String tenTaiKhoan;
     public SalesMgrJF(String username) {
         initComponents();
         setLocationRelativeTo(null);
         this.username = username;
+         jTextField1.setText(tenTaiKhoan);
     }
  private void jButton1ActionPerformed() {
         // Mở InterfaceJF và truyền username
@@ -216,7 +217,7 @@ public class SalesMgrJF extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 628, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(newReceiptbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(349, 349, 349)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)

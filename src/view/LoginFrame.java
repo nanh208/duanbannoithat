@@ -23,7 +23,7 @@ public class LoginFrame extends javax.swing.JFrame {
         String tk = txtTenTaiKhoan.getText().trim();
         String mk = new String(txtMatKhau.getPassword()).trim();
 
-        try (Connection con = ConnectDB.getConnect()) {
+      try (Connection con = ConnectDB.getConnect()) {
             String sql = "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, tk);
@@ -31,10 +31,17 @@ public class LoginFrame extends javax.swing.JFrame {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                String quyen = rs.getString("permission");
                 JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
 
-                // Mở trực tiếp InterfaceJF và truyền tên tài khoản
-                new InterfaceJF(tk).setVisible(true);
+                if ("Nhân Viên".equalsIgnoreCase(quyen)) {
+                    new SalesMgrJF(tk).setVisible(true);  // Truyền tên tài khoản vào
+                } else if ("Quản Lý".equalsIgnoreCase(quyen)) {
+                    new InterfaceJF(tk).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không xác định được quyền truy cập.");
+                    return;
+                }
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
@@ -43,7 +50,6 @@ public class LoginFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
     }
-
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
     }
