@@ -92,4 +92,31 @@ public class TaiKhoanNVDAO {
         System.out.println("Lỗi xóa tài khoản nhân viên: " + e.getMessage());
     }
 }
+     public NhanVienEntity checkLogin(long maTaiKhoan, String password, String permission) {
+    try {
+        Connection con = ConnectDB.getConnect();
+        String sql = "SELECT * FROM TaiKhoanNV WHERE maTaiKhoan = ? AND password = ? AND permission = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setLong(1, maTaiKhoan);
+        stmt.setString(2, password);
+        stmt.setString(3, permission);
+
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return new NhanVienEntity(
+                rs.getLong("maTaiKhoan"),
+                rs.getString("password"),
+                rs.getString("tenTaiKhoan"),
+                rs.getString("Email"),
+                rs.getString("permission"),
+                rs.getInt("SDT"),
+                rs.getDate("namSinh")
+            );
+        }
+    } catch (Exception e) {
+        System.out.println("Lỗi kiểm tra đăng nhập: " + e.getMessage());
+    }
+    return null;
+}
+
 }

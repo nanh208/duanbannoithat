@@ -14,39 +14,36 @@ public class LoginFrame extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null); // Căn giữa màn hình
 
-        // Thiết lập giá trị cho combo box
-
         // Gắn sự kiện
         btnDangNhap.addActionListener(e -> dangNhap());
         btnThoat.addActionListener(e -> System.exit(0));
     }
 
-       private void dangNhap() {
-    String tk = txtTenTaiKhoan.getText().trim();
-    String mk = new String(txtMatKhau.getPassword()).trim();
+    private void dangNhap() {
+        String tk = txtTenTaiKhoan.getText().trim();
+        String mk = new String(txtMatKhau.getPassword()).trim();
 
-    try (Connection con = ConnectDB.getConnect()) {
-        PreparedStatement stmt = con.prepareStatement(
-            "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?  "
-        );
-        stmt.setString(1, tk);
-        stmt.setString(2, mk);
-        
+        try (Connection con = ConnectDB.getConnect()) {
+            String sql = "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tk);
+            stmt.setString(2, mk);
 
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
 
-          
-            new InterfaceJF().setVisible(true);
-            dispose(); // Đóng form login
-        } else {
-            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu");
+                // Mở trực tiếp InterfaceJF và truyền tên tài khoản
+                new InterfaceJF(tk).setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
     }
-}
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
     }
