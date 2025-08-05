@@ -39,7 +39,7 @@ int row;
             MaKH = Long.parseLong(txtMavoucher.getText().trim());
         }
 
-        String Giamgia = txtGiamgia.getText().trim();
+        int Giamgia = Integer.parseInt(txtGiamgia.getText().trim());
         String Mota = txtMota.getText().trim();
 
 
@@ -56,7 +56,7 @@ int row;
     public void setVoucher(vouCher vc){
         txtMavoucher.setText(String.valueOf(vc.getMaVouch()));
        txtMota.setText(vc.getMoTa());
-        txtGiamgia.setText(vc.getGiamGia());
+        txtGiamgia.setText(String.valueOf(vc.getGiamGia()));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -224,7 +224,7 @@ int row;
         this.row= tblVoucher.getSelectedRow();
         String MaVouch = String.valueOf(tblVoucher.getValueAt(this.row,0));
         String moTa = String.valueOf(tblVoucher.getValueAt(this.row,1));
-        String giamGia = String.valueOf(tblVoucher.getValueAt(this.row,2));
+        int giamGia = Integer.parseInt(String.valueOf(tblVoucher.getValueAt(this.row,2)));
         vouCher vc = new vouCher(Long.parseLong(MaVouch), moTa, giamGia);
         this.setVoucher(vc);
     }//GEN-LAST:event_tblVoucherMouseClicked

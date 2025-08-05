@@ -9,15 +9,17 @@ package entity;
  * @author nem mèn mén
  */
 public class vouCher {
-    private long MaVouch;
-    private String  moTa, giamGia;
 
-    public vouCher(String moTa, String giamGia) {
+    private long MaVouch;
+    private String moTa;
+    private int giamGia;
+
+    public vouCher(String moTa, int giamGia) {
         this.moTa = moTa;
         this.giamGia = giamGia;
     }
 
-    public vouCher(long MaVouch, String moTa, String giamGia) {
+    public vouCher(long MaVouch, String moTa, int giamGia) {
         this.MaVouch = MaVouch;
         this.moTa = moTa;
         this.giamGia = giamGia;
@@ -39,15 +41,15 @@ public class vouCher {
         this.moTa = moTa;
     }
 
-    public String getGiamGia() {
+    public int getGiamGia() {
         return giamGia;
     }
 
-    public void setGiamGia(String giamGia) {
+    public void setGiamGia(int giamGia) {
         this.giamGia = giamGia;
     }
 
     public vouCher() {
     }
-    
+
 }
