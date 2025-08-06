@@ -3,32 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package entity;
-
 /**
  *
  * @author Thinhdzaingatngay
  */
-public class LoaiEntity {
+public class LoaiEntity1 {
     private long maLoai;
     private String ten;
-    private String LoaiSP;
+    private String loaiSanPham;
 
-    public LoaiEntity(long maLoai, String ten, String LoaiSP) {
+    public LoaiEntity1(long maLoai, String ten, String loaiSanPham) {
         this.maLoai = maLoai;
         this.ten = ten;
-        this.LoaiSP = LoaiSP;
+        this.loaiSanPham = loaiSanPham;
     }
 
-    public LoaiEntity() {
-    }
-
-    public LoaiEntity(String ten, String LoaiSP) {
+    public LoaiEntity1(String ten, String loaiSanPham) {
         this.ten = ten;
-        this.LoaiSP = LoaiSP;
+        this.loaiSanPham = loaiSanPham;
     }
 
-    
-    
     public long getMaLoai() {
         return maLoai;
     }
@@ -45,12 +39,12 @@ public class LoaiEntity {
         this.ten = ten;
     }
 
-    public String getLoaiSP() {
-        return LoaiSP;
+    public String getLoaiSanPham() {
+        return loaiSanPham;
     }
 
-    public void setLoaiSP(String LoaiSP) {
-        this.LoaiSP = LoaiSP;
+    public void setLoaiSanPham(String loaiSanPham) {
+        this.loaiSanPham = loaiSanPham;
     }
     
 }

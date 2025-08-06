@@ -6,7 +6,7 @@ package view;
     import dao.ChitietSPDAO;
 import dao.LoaiDAO;
 import entity.ChitietSPEntity;
-import entity.LoaiEntity;
+import entity.LoaiEntity1;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -46,9 +46,9 @@ ChitietSPDAO ctDAO = new ChitietSPDAO();
     }
      private void loadMaLoai() {
         LoaiDAO loaiDAO = new LoaiDAO();
-        List<LoaiEntity> dsLoai = loaiDAO.getAll();
+        List<LoaiEntity1> dsLoai = loaiDAO.getAll();
         cboMaLoai.removeAllItems();
-        for (LoaiEntity loai : dsLoai) {
+        for (LoaiEntity1 loai : dsLoai) {
             cboMaLoai.addItem(String.valueOf(loai.getMaLoai()));
         }
     }
