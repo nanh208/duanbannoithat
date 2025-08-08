@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+
 import java.sql.PreparedStatement;
 import entity.KhachHangEntity;
 import java.sql.Connection;
@@ -17,14 +18,15 @@ import java.sql.ResultSet;
  * @author nem mèn mén
  */
 public class KhachHangdao_1 {
-    public List<KhachHangEntity> getAll(){
+
+    public List<KhachHangEntity> getAll() {
         List<KhachHangEntity> List = new ArrayList();
-        try{
-             Connection con = ConnectDB.getConnect();
+        try {
+            Connection con = ConnectDB.getConnect();
             String sql = "select * from KhachHang";
             PreparedStatement statement = con.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
-            while(result.next()){
+            while (result.next()) {
                 KhachHangEntity khachhang = new KhachHangEntity(result.getLong("maKhachHang"),
                         result.getString("tenKhachHang"),
                         result.getString("diaChi"),
@@ -33,15 +35,64 @@ public class KhachHangdao_1 {
                         result.getDate("ngaySInh"));
                 List.add(khachhang);
             }
-        } catch(Exception e ){
-            System.out.println("lỗi get all Khách Hàng" +  e.getMessage());
+        } catch (Exception e) {
+            System.out.println("lỗi get all Khách Hàng" + e.getMessage());
         }
-    return List;
-}    
-    public void update(KhachHangEntity kh){
-        try{
+        return List;
+    }
+
+    public KhachHangEntity getByID(long maKhachHang) {
+        KhachHangEntity khachhang = null;
+        try {
             Connection con = ConnectDB.getConnect();
-            String sql = "update KhachHang set tenKhachHang = ?, diaChi= ?," 
+            String sql = "SELECT * FROM KhachHang WHERE maKhachHang = ?";
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setLong(1, maKhachHang);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                khachhang = new KhachHangEntity(
+                        result.getLong("maKhachHang"),
+                        result.getString("tenKhachHang"),
+                        result.getString("diaChi"),
+                        result.getString("gioiTinh"),
+                        result.getInt("SDT"),
+                        result.getDate("ngaySInh")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi tìm khách hàng theo mã: " + e.getMessage());
+        }
+        return khachhang;
+    }
+
+    public KhachHangEntity getByName(String tenKhachHang) {
+        KhachHangEntity khachhang = null;
+        try {
+            Connection con = ConnectDB.getConnect();
+            String sql = "SELECT * FROM KhachHang WHERE tenKhachHang = ?";
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setString(1, tenKhachHang);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                khachhang = new KhachHangEntity(
+                        result.getLong("maKhachHang"),
+                        result.getString("tenKhachHang"),
+                        result.getString("diaChi"),
+                        result.getString("gioiTinh"),
+                        result.getInt("SDT"),
+                        result.getDate("ngaySInh")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi tìm khách hàng theo tên: " + e.getMessage());
+        }
+        return khachhang;
+    }
+
+    public void update(KhachHangEntity kh) {
+        try {
+            Connection con = ConnectDB.getConnect();
+            String sql = "update KhachHang set tenKhachHang = ?, diaChi= ?,"
                     + "SDT = ?,ngaySInh = ?, gioiTinh = ? where maKhachHang = ?  ";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, kh.getTenKH());
@@ -51,14 +102,15 @@ public class KhachHangdao_1 {
             statement.setDate(4, sqlDate);
             statement.setString(5, kh.getGioitinh());
             statement.setLong(6, kh.getMaKH());
-            
+
             statement.execute();
-            
-        }catch(Exception e) {
+
+        } catch (Exception e) {
             System.out.println("Lỗi update khách hàng: " + e.getMessage());
         }
-        
+
     }
+
     public void delete(int maKH) {
         try {
             Connection con = ConnectDB.getConnect();
@@ -70,10 +122,11 @@ public class KhachHangdao_1 {
             System.out.println("Lỗi delete Khách hàng: " + e.getMessage());
         }
     }
-    public void insert (KhachHangEntity kh){
-        try{
+
+    public void insert(KhachHangEntity kh) {
+        try {
             Connection con = ConnectDB.getConnect();
-            String sql = "INSERT INTO KhachHang (tenKhachHang,diaChi, SDT, ngaySInh, gioiTinh)" 
+            String sql = "INSERT INTO KhachHang (tenKhachHang,diaChi, SDT, ngaySInh, gioiTinh)"
                     + "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, kh.getTenKH());
@@ -82,10 +135,10 @@ public class KhachHangdao_1 {
             statement.setDate(4, new java.sql.Date(kh.getNgaySinh().getTime()));
             statement.setString(5, kh.getGioitinh());
             statement.executeUpdate();
-            
-        }catch(Exception e) {
+
+        } catch (Exception e) {
             System.out.println("Lỗi insert khách hàng: " + e.getMessage());
         }
-        
+
     }
 }

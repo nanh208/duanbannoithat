@@ -13,16 +13,33 @@ public class vouCher {
     private long MaVouch;
     private String moTa;
     private int giamGia;
+    private boolean status;
 
-    public vouCher(String moTa, int giamGia) {
+    public vouCher(String moTa, int giamGia, boolean status) {
         this.moTa = moTa;
         this.giamGia = giamGia;
+        this.status = status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 
     public vouCher(long MaVouch, String moTa, int giamGia) {
         this.MaVouch = MaVouch;
         this.moTa = moTa;
         this.giamGia = giamGia;
+    }
+
+    public vouCher(long MaVouch, String moTa, int giamGia, boolean status) {
+        this.MaVouch = MaVouch;
+        this.moTa = moTa;
+        this.giamGia = giamGia;
+        this.status = status;
     }
 
     public long getMaVouch() {

@@ -93,13 +93,12 @@ public class ReceiptDAO {
             Timestamp timestamp = Timestamp.valueOf(now);
 
             Connection database = ConnectDB.getConnect();
-            String query = "INSERT INTO HoaDon (maHoaDon, maTaiKhoan, maKhachHang, moTa, tongTien, trangThai, maVouch, ngayTao) "
-                    + "VALUES (?, ?, NULL, '', 0, 0, NULL, ?)";
+            String query = "INSERT INTO HoaDon (maTaiKhoan, maKhachHang, moTa, tongTien, trangThai, maVouch, ngayTao) "
+                    + "VALUES (?, NULL, '', 0, 0, NULL, ?)";
 
             PreparedStatement statement = database.prepareStatement(query);
-            statement.setLong(1, receiptID);       // maHoaDon
-            statement.setLong(2, accountID);       // maTaiKhoan
-            statement.setTimestamp(3, timestamp);
+            statement.setLong(1, accountID);       // maTaiKhoan
+            statement.setTimestamp(2, timestamp);
 
             statement.execute();
         } catch (Exception e) {
@@ -126,6 +125,36 @@ public class ReceiptDAO {
         return receipts;
     }
 
+    public List<receiptEntities> getAllByStatus(boolean status) {
+        List<receiptEntities> receipts = new ArrayList<>();
+        try {
+            Connection database = ConnectDB.getConnect();
+            String query = "SELECT * FROM HoaDon WHERE trangThai = ?";
+            PreparedStatement statement = database.prepareStatement(query);
+            statement.setBoolean(1, status);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                receiptEntities receipt = new receiptEntities(
+                        result.getLong("maHoaDon"),
+                        result.getLong("maKhachHang"),
+                        result.getLong("maTaiKhoan"),
+                        result.getDate("ngayTao").toString(),
+                        result.getString("moTa"),
+                        result.getInt("tongTien"),
+                        result.getBoolean("trangThai"),
+                        result.getLong("maVouch")
+                );
+                receipts.add(receipt);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "An error occurred whilst retrieving receipt data: " + e
+                    + "\nHãy báo đến quản trị viên để được hỗ trợ.",
+                    "SQL Error", 0);
+        }
+        return receipts;
+    }
+
     public List<receiptEntitiesA> getAllatA() {
         List<receiptEntitiesA> receiptsA = new ArrayList();
         try {
@@ -141,6 +170,25 @@ public class ReceiptDAO {
             JOptionPane.showMessageDialog(null, "An error occurred whilst retrieving extra receipt data: " + e + "\nHãy báo đến quản trị viên để được hỗ trợ.", "SQL Error", 0);
         }
         return receiptsA;
+    }
+
+    public int[] getTotalAmountAndPrice() {
+        int[] totals = new int[2]; // [0] = soLuong, [1] = donGia
+        try {
+            Connection database = ConnectDB.getConnect();
+            String query = "SELECT SUM(soLuong) AS totalAmount, SUM(donGia) AS totalPrice FROM HoaDonDetailed";
+            PreparedStatement statement = database.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                totals[0] = result.getInt("totalAmount");
+                totals[1] = result.getInt("totalPrice");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "An error occurred whilst calculating totals: " + e
+                    + "\nHãy báo đến quản trị viên để được hỗ trợ.", "SQL Error", 0);
+        }
+        return totals;
     }
 
     public void newReceiptA(receiptEntitiesA receiptA) {
@@ -162,8 +210,8 @@ public class ReceiptDAO {
     public void updateReceipt(receiptEntities receipt) {
         try {
             Connection database = ConnectDB.getConnect();
-            String query = "UPDATE HoaDon SET maTaiKhoan = ?, moTa = ?, tongTien = ?, trangThai = ?, maVouch = ? "
-                    + "WHERE maKhachHang = ?";
+            String query = "UPDATE HoaDon SET maTaiKhoan = ?, moTa = ?, tongTien = ?, trangThai = ?, maVouch = ?, maKhachHang = ? "
+                    + "WHERE maHoaDon = ?";
 
             PreparedStatement statement = database.prepareStatement(query);
 
@@ -173,6 +221,7 @@ public class ReceiptDAO {
             statement.setBoolean(4, receipt.isStatus());
             statement.setLong(5, receipt.getVoucherID());
             statement.setLong(6, receipt.getCustomerID());
+            statement.setLong(7, receipt.getID()); // Update by maHoaDon
 
             statement.execute();
         } catch (Exception e) {
@@ -251,14 +300,13 @@ public class ReceiptDAO {
         }
     }
 
-    public void deleteItemRA(long receiptID, long furnitureID) {
+    public void deleteItemRA(long receiptID) {
         try {
             Connection database = ConnectDB.getConnect();
-            String query = "DELETE FROM HoaDonDetailed WHERE maHoaDon = ? AND maNoiThat = ?";
+            String query = "DELETE FROM HoaDonDetailed WHERE maChiTietHD = ?";
 
             PreparedStatement statement = database.prepareStatement(query);
             statement.setLong(1, receiptID);
-            statement.setLong(2, furnitureID);
 
             statement.execute();
         } catch (Exception e) {

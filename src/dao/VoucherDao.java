@@ -24,9 +24,7 @@ public class VoucherDao {
             PreparedStatement statement = con.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                vouCher voucher = new vouCher(result.getLong("maVouch"),
-                        result.getString("moTa"),
-                        result.getInt("giamGia"));
+                vouCher voucher = new vouCher(result.getLong("maVouch"), result.getString("moTa"), result.getInt("giamGia"), result.getBoolean("active"));
                 List.add(voucher);
             }
         } catch (Exception e) {
@@ -34,6 +32,30 @@ public class VoucherDao {
         }
         return List;
     }
+    
+    public List<vouCher> getAllByStatus(boolean activeStatus) {
+    List<vouCher> list = new ArrayList<>();
+    try {
+        Connection con = ConnectDB.getConnect();
+        String sql = "SELECT * FROM Vouchers WHERE active = ?";
+        PreparedStatement statement = con.prepareStatement(sql);
+        statement.setBoolean(1, activeStatus);
+        ResultSet result = statement.executeQuery();
+        while (result.next()) {
+            vouCher voucher = new vouCher(
+                result.getLong("maVouch"),
+                result.getString("moTa"),
+                result.getInt("giamGia"),
+                result.getBoolean("active")
+            );
+            list.add(voucher);
+        }
+    } catch (Exception e) {
+        System.out.println("Lỗi lấy voucher theo trạng thái: " + e.getMessage());
+    }
+    return list;
+}
+
 
     public vouCher getSpecific(long ID) {
         vouCher voucher = null;
@@ -45,9 +67,9 @@ public class VoucherDao {
             ResultSet result = statement.executeQuery();
             if (result.next()) {
                 voucher = new vouCher(
-                        result.getLong("maVouch"),
                         result.getString("moTa"),
-                        result.getInt("giamGia")
+                        result.getInt("giamGia"),
+                        result.getBoolean("active")
                 );
             }
         } catch (Exception e) {
@@ -71,6 +93,19 @@ public class VoucherDao {
             System.out.println("Lỗi thêm voucher: " + e.getMessage());
         }
 
+    }
+
+    public void setStatus(long ID, boolean status) {
+        try {
+            Connection database = ConnectDB.getConnect();
+            String query = "UPDATE Vouchers SET active = ? WHERE maVouch = ?";
+            PreparedStatement statement = database.prepareStatement(query);
+            statement.setBoolean(1, status);
+            statement.setLong(2, ID);
+            statement.execute();
+        } catch (Exception e) {
+            System.out.println("Error updating the voucher status: " + e);
+        }
     }
 
     public void update(vouCher vc) {

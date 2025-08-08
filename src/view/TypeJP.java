@@ -52,10 +52,9 @@ public class TypeJP extends javax.swing.JPanel {
     
     public LoaiEntity1 getForm() {
         try {
-            long maLoai = Long.parseLong(txtMaLoai.getText().trim());
             String ten = txtTen.getText().trim();
             String loaiSanPham = txtLoaiSP.getText().trim();
-            return new LoaiEntity1(maLoai, ten, loaiSanPham);
+            return new LoaiEntity1(ten, loaiSanPham);
         }catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng");
             return null;
@@ -113,8 +112,9 @@ public class TypeJP extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(800, 500));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Mã Loại");
+        jLabel2.setText("Mã Loại (Auto)");
 
+        txtMaLoai.setEditable(false);
         txtMaLoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaLoai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

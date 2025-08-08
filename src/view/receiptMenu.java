@@ -7,20 +7,35 @@ package view;
 import javax.swing.JFrame;
 import entity.*;
 import dao.*;
+import java.text.DecimalFormatSymbols;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Set;
+import javax.swing.JOptionPane;
 
 public class receiptMenu extends javax.swing.JPanel {
 
     private SalesMgrJF SalesMgr;
     private ReceiptDAO RDAO;
     private VoucherDao VDAO;
+    private KhachHangdao_1 KDAO;
+    private TaiKhoanDAO NDAO2;
+    private String username;
 
     public receiptMenu(SalesMgrJF SalesMgr) {
         this.SalesMgr = SalesMgr;
         this.RDAO = SalesMgr.getRDAO();
         this.VDAO = SalesMgr.getVDAO();
+        this.KDAO = SalesMgr.getKDAO();
+        this.NDAO2 = SalesMgr.getNDAO2();
+        this.username = SalesMgr.getUser();
         initComponents();
 
+    }
+
+    public long getID() {
+        long ID = Long.parseLong(IDBox.getText());
+        return ID;
     }
 
     public int calculateTotal(long maHoaDon) {
@@ -28,10 +43,15 @@ public class receiptMenu extends javax.swing.JPanel {
         List<receiptEntitiesA> receiptItems = RDAO.getSpecifics(maHoaDon);
 
         for (receiptEntitiesA item : receiptItems) {
-            total += item.getPrice() * item.getAmount(); // Using getters
+            total += item.getPrice(); // Using getters
         }
 
         return total;
+    }
+
+    public void fillCustomerData(String name, String PN) {
+        txtKhach.setText(name);
+        txtPhone.setText(PN);
     }
 
     public void displayData(long ID) {
@@ -39,32 +59,105 @@ public class receiptMenu extends javax.swing.JPanel {
         receiptEntities receipt = RDAO.getSpecificReceipt(ID);
         vouCher voucher = VDAO.getSpecific(receipt.getVoucherID());
         List<receiptEntitiesA> receiptA = RDAO.getSpecifics(ID);
+        KhachHangEntity khach = KDAO.getByID(receipt.getCustomerID());
         int itemcount = 0;
         for (receiptEntitiesA item : receiptA) {
             itemcount += item.getAmount();
         }
+        int discAmount = 0;
         int total = calculateTotal(ID);
         int discount = 0;
         if (voucher != null) {
             discount = voucher.getGiamGia();
+            discAmount = total * discount / 100;
         }
-        int discAmount = total * discount / 100;
         int finalPrice = total - discAmount;
         String count = String.valueOf(receiptA.size());
-        txtMoney.setText(String.valueOf(total));
+        if (khach != null) {
+            txtKhach.setText(khach.getTenKH());
+            txtPhone.setText(String.valueOf(khach.getSdt()));
+        }
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');  // use space as thousands separator
+        DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+
+        txtMoney.setText(formatter.format(total));
+        txtTotal.setText(formatter.format(finalPrice));
         IDBox.setText(String.valueOf(ID));
         txtCount.setText(count);
         txtAmount.setText(String.valueOf(itemcount));
         creationBox.setText(receipt.getDatetime());
+        txtDesc.setText(receipt.getDesc());
         txtVoucher.setText(String.valueOf(receipt.getVoucherID()));
         txtDiscount.setText(String.valueOf(discAmount) + "(" + String.valueOf(discount) + "%)");
-        txtTotal.setText(String.valueOf(finalPrice));
+
         if (receipt.isStatus() == false) {
             editButton.setEnabled(true);
-        }
-        else {
+            payButton.setEnabled(true);
+        } else {
             editButton.setEnabled(false);
+            payButton.setEnabled(false);
+            payButton.setText("Đã thanh toán.");
         }
+    }
+
+    public boolean applyDiscount() {
+        String ID = txtVoucher.getText();
+        vouCher voucher = VDAO.getSpecific(Long.parseLong(ID));
+        if (voucher == null || ID.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Mã voucher không hợp lệ hoặc trống. Bấm OK để bỏ qua.");
+        } else {
+            int total = calculateTotal(Long.parseLong(ID));
+            int discount = 0;
+            discount = voucher.getGiamGia();
+            int discAmount = total * discount / 100;
+            int finalPrice = total - discAmount;
+            txtDiscount.setText(String.valueOf(discAmount) + "(" + String.valueOf(discount) + "%)");
+            txtTotal.setText(String.valueOf(finalPrice));
+            return true;
+        }
+        return false;
+    }
+
+    public void finishData() {
+
+        String tenKhach = txtKhach.getText();
+        String idStr = IDBox.getText();
+        String creationDate = creationBox.getText();
+        String finalPriceStr = txtTotal.getText();
+        String desc = txtDesc.getText();
+        long accountID = NDAO2.getAccountID(username);
+        KhachHangEntity khach = KDAO.getByName(tenKhach);
+        long customerID = 0;
+        if (khach != null) {
+            customerID = khach.getMaKH();
+        }
+        long id = Long.parseLong(idStr);
+        long voucherId = 0;
+        int value = Integer.parseInt(finalPriceStr.replace(" ", ""));
+
+        boolean discountStat = applyDiscount();
+        if (discountStat == true) {
+            String voucherIdStr = txtVoucher.getText();
+            if (!voucherIdStr.isEmpty() || !voucherIdStr.isBlank()) {
+                voucherId = Long.parseLong(voucherIdStr);
+            }
+            System.out.println("No voucher detected... moving on...");
+        }
+
+        receiptEntities receipt = new receiptEntities(
+                id,
+                customerID,
+                accountID,
+                creationDate,
+                desc,
+                value,
+                true,
+                voucherId
+        );
+        RDAO.updateReceipt(receipt);
+
     }
 
     /**
@@ -97,7 +190,6 @@ public class receiptMenu extends javax.swing.JPanel {
         jLabel12 = new javax.swing.JLabel();
         txtCount = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        btnVouch = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         txtMoney = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -105,7 +197,9 @@ public class receiptMenu extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         payButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtDesc = new javax.swing.JTextField();
+        applyVouch = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(390, 680));
         setMinimumSize(new java.awt.Dimension(390, 680));
@@ -146,13 +240,6 @@ public class receiptMenu extends javax.swing.JPanel {
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setText("Số Lượng NT");
 
-        btnVouch.setText("Tìm");
-        btnVouch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVouchActionPerformed(evt);
-            }
-        });
-
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel14.setText("Tổng giá");
 
@@ -163,10 +250,19 @@ public class receiptMenu extends javax.swing.JPanel {
 
         payButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         payButton.setText("Thanh Toán");
+        payButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payButtonActionPerformed(evt);
+            }
+        });
 
         editButton.setText("Cập Nhật");
 
-        cancelButton.setText("Huỷ");
+        jLabel3.setText("Mô Tả");
+
+        txtDesc.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        applyVouch.setText("Áp Dụng");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -181,22 +277,12 @@ public class receiptMenu extends javax.swing.JPanel {
                                 .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel8)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel13)
                                                 .addGap(18, 18, 18)
@@ -213,13 +299,23 @@ public class receiptMenu extends javax.swing.JPanel {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(jLabel10)
                                                     .addComponent(jLabel14))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(txtMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(txtVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(24, 24, 24)
+                                                        .addComponent(txtVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(btnVouch, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
+                                                        .addComponent(applyVouch))
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(txtMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(jLabel8))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(txtAmount, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                                                    .addComponent(txtDesc)))))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -246,7 +342,12 @@ public class receiptMenu extends javax.swing.JPanel {
                                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(52, 52, 52)
-                        .addComponent(jLabel16)))
+                        .addComponent(jLabel16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(payButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
@@ -279,7 +380,7 @@ public class receiptMenu extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(creationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(txtCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -287,7 +388,11 @@ public class receiptMenu extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(txtMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -295,7 +400,7 @@ public class receiptMenu extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVouch))
+                    .addComponent(applyVouch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -304,26 +409,26 @@ public class receiptMenu extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(editButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton))
-                    .addComponent(payButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(payButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVouchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVouchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVouchActionPerformed
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
+        int select = JOptionPane.showConfirmDialog(null, "Bạn có chắc là thanh toán không?", "Thanh Toán", JOptionPane.YES_NO_OPTION);
+        if (select == JOptionPane.YES_OPTION) {
+            this.finishData();
+            JOptionPane.showMessageDialog(null, "Thanh toán thành công.");
+        }
+    }//GEN-LAST:event_payButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel IDBox;
-    private javax.swing.JButton btnVouch;
-    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton applyVouch;
     private javax.swing.JTextField creationBox;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel1;
@@ -335,6 +440,7 @@ public class receiptMenu extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -345,6 +451,7 @@ public class receiptMenu extends javax.swing.JPanel {
     private javax.swing.JButton payButton;
     private javax.swing.JTextField txtAmount;
     private javax.swing.JTextField txtCount;
+    private javax.swing.JTextField txtDesc;
     private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtKhach;
     private javax.swing.JTextField txtMoney;

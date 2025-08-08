@@ -3,11 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package entity;
+
 /**
  *
  * @author Thinhdzaingatngay
  */
 public class LoaiEntity1 {
+
     private long maLoai;
     private String ten;
     private String loaiSanPham;
@@ -46,5 +48,5 @@ public class LoaiEntity1 {
     public void setLoaiSanPham(String loaiSanPham) {
         this.loaiSanPham = loaiSanPham;
     }
-    
+
 }

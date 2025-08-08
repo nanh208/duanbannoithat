@@ -17,13 +17,15 @@ import javax.swing.Timer;
  */
 public class InterfaceJF extends javax.swing.JFrame {
 
- private String tenTaiKhoan;
+    private String tenTaiKhoan;
 
     public InterfaceJF(String tenTaiKhoan) {
         this.tenTaiKhoan = tenTaiKhoan;
         initComponents();
-        pnlMain.setLayout(new BorderLayout());
+        this.setLocationRelativeTo(null);
         jTextField1.setText(tenTaiKhoan);
+        pnlMain.setLayout(new BorderLayout());
+        showPanel(new DashboardJP1());
     }
 
     private void showPanel(JPanel panel) {
@@ -64,11 +66,10 @@ public class InterfaceJF extends javax.swing.JFrame {
         connectStatus = new javax.swing.JTextField();
         tblthoat1 = new javax.swing.JButton();
         QLNVbtn = new javax.swing.JButton();
+        manageFurnitureBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1200, 600));
         setMinimumSize(new java.awt.Dimension(1200, 600));
-        setPreferredSize(new java.awt.Dimension(1200, 600));
         setResizable(false);
 
         QLKHbtn.setText("Quản Lý Khách Hàng");
@@ -197,45 +198,48 @@ public class InterfaceJF extends javax.swing.JFrame {
             }
         });
 
+        manageFurnitureBtn.setText("Quản Lý Nội Thất");
+        manageFurnitureBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        manageFurnitureBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        manageFurnitureBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageFurnitureBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1)
+                    .addComponent(tblVouchers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tblloai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tblchitiensanpham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btlquanlysanpham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(QLKHbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(17, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(tblVouchers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tblloai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tblchitiensanpham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btlquanlysanpham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(QLKHbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(connectStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(QLNVbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(connectStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(QLNVbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                    .addComponent(tblthoat1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(tblBack, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(tblBack, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(manageFurnitureBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(27, 27, 27)
-                    .addComponent(tblthoat1)
-                    .addContainerGap(951, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -255,14 +259,13 @@ public class InterfaceJF extends javax.swing.JFrame {
                 .addComponent(tblloai, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tblVouchers, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(manageFurnitureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tblBack)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(486, Short.MAX_VALUE)
-                    .addComponent(tblthoat1)
-                    .addContainerGap()))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tblthoat1)
+                .addContainerGap())
         );
 
         pack();
@@ -272,14 +275,13 @@ public class InterfaceJF extends javax.swing.JFrame {
         boolean connectionState = connectToDB();
         if (connectionState == false) {
             JOptionPane.showMessageDialog(rootPane, "Kết nối đến dữ liệu thất bại.");
-        }
-        else {
+        } else {
             showPanel(new CustomerJP());
         }
     }//GEN-LAST:event_QLKHbtnMouseClicked
 
     private void btlquanlysanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btlquanlysanphamMouseClicked
-        // TODO add your handling code here:
+        showPanel(new ProdmgmtJP());
     }//GEN-LAST:event_btlquanlysanphamMouseClicked
 
     private void tblchitiensanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblchitiensanphamMouseClicked
@@ -287,7 +289,7 @@ public class InterfaceJF extends javax.swing.JFrame {
     }//GEN-LAST:event_tblchitiensanphamMouseClicked
 
     private void tblloaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblloaiMouseClicked
-         showPanel(new TypeJP());
+        showPanel(new TypeJP());
     }//GEN-LAST:event_tblloaiMouseClicked
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
@@ -295,8 +297,7 @@ public class InterfaceJF extends javax.swing.JFrame {
         boolean connectionState = connectToDB();
         if (connectionState == false) {
             JOptionPane.showMessageDialog(rootPane, "Kết nối đến dữ liệu thất bại.");
-        }
-        else {
+        } else {
             showPanel(new VoucherJP());
         }
     }//GEN-LAST:event_tblVouchersMouseClicked
@@ -306,7 +307,7 @@ public class InterfaceJF extends javax.swing.JFrame {
     }//GEN-LAST:event_tblBackMouseClicked
 
     private void QLKHbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QLKHbtnActionPerformed
-
+        showPanel(new CustomerJP());
     }//GEN-LAST:event_QLKHbtnActionPerformed
 
     private void QLNVbtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QLNVbtnMouseClicked
@@ -321,8 +322,8 @@ public class InterfaceJF extends javax.swing.JFrame {
 showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
 
     private void tblBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblBackActionPerformed
-    this.dispose(); 
-    new SalesMgrJF(tenTaiKhoan).setVisible(true);
+        this.dispose();
+        new SalesMgrJF(tenTaiKhoan).setVisible(true);
     }//GEN-LAST:event_tblBackActionPerformed
 
     private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
@@ -338,18 +339,22 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
     }//GEN-LAST:event_tblthoat1ActionPerformed
 
     private void btlquanlysanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlquanlysanphamActionPerformed
-    this.dispose(); // Đóng InterfaceJF hiện tại
-    new SalesMgrJF(tenTaiKhoan).setVisible(true);
+        this.dispose(); // Đóng InterfaceJF hiện tại
+        new SalesMgrJF(tenTaiKhoan).setVisible(true);
     }//GEN-LAST:event_btlquanlysanphamActionPerformed
 
     private void connectStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectStatusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_connectStatusActionPerformed
 
+    private void manageFurnitureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFurnitureBtnActionPerformed
+        showPanel(new ProdmgmtJP());
+    }//GEN-LAST:event_manageFurnitureBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
-   public static void main(String args[]) {
+    public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new InterfaceJF("Guest").setVisible(true);
@@ -364,6 +369,7 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
     private javax.swing.JTextField connectStatus;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton manageFurnitureBtn;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JButton tblBack;
     private javax.swing.JButton tblVouchers;

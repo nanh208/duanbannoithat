@@ -19,6 +19,8 @@ public class receiptEntities {
     boolean status;
     long voucherID;
 
+    
+    
     public receiptEntities(long CustomerID, long AccountID, String datetime, String desc, int total, boolean status, long voucherID) {
         this.CustomerID = CustomerID;
         this.AccountID = AccountID;

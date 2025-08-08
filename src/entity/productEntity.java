@@ -18,6 +18,14 @@ public class productEntity {
     public productEntity() {
     }
 
+    public productEntity(long type, String name, String desc, int price) {
+        this.type = type;
+        this.name = name;
+        this.desc = desc;
+        this.price = price;
+    }
+    
+
     public productEntity(long ID, long type, String name, String desc, int price) {
         this.ID = ID;
         this.type = type;

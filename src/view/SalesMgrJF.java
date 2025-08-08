@@ -11,6 +11,10 @@ import javax.swing.table.DefaultTableModel;
 import entity.*;
 import dao.*;
 import java.util.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableRowSorter;
+
 
 public class SalesMgrJF extends javax.swing.JFrame {
 
@@ -23,8 +27,37 @@ public class SalesMgrJF extends javax.swing.JFrame {
     private TaiKhoanNVDAO NDAO = new TaiKhoanNVDAO();
     private TaiKhoanDAO NDAO2 = new TaiKhoanDAO();
     private VoucherDao VDAO = new VoucherDao();
+    receiptMenu newMenu = new receiptMenu(this);
+  
 
-    receiptMenu menu = new receiptMenu(this);
+    public void Search() {
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                search();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                search();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                search();
+            }
+
+            public void search() {
+                String search = searchField.getText().trim();
+                DefaultTableModel model = (DefaultTableModel) productList.getModel();
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+                productList.setRowSorter(sorter);
+
+                if (search.isEmpty()) {
+                    sorter.setRowFilter(null);
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + search));
+                }
+            }
+        });
+    }
 
     public ReceiptDAO getRDAO() {
         return RDAO;
@@ -34,24 +67,38 @@ public class SalesMgrJF extends javax.swing.JFrame {
         return VDAO;
     }
 
+    public KhachHangdao_1 getKDAO() {
+        return KDAO;
+    }
+
+    public TaiKhoanDAO getNDAO2() {
+        return NDAO2;
+    }
+
+    public String getUser() {
+        return username;
+    }
+    
+    public void refreshDetailFR() {
+        
+    }
+    
     public void refreshDetail(long ID) {
         DefaultTableModel shopList = (DefaultTableModel) cartList.getModel();
         shopList.setRowCount(0);
         for (receiptEntitiesA receiptA : RDAO.getSpecifics(ID)) {
-            productEntity product = PDAO.getProductByID(ID);
-            Object[] dataRA = {receiptA.getFurnitureID(), product.getName(), receiptA.getAmount(), receiptA.getPrice()};
+            productEntity product = PDAO.getProductByID(receiptA.getFurnitureID());
+            Object[] dataRA = {receiptA.getDetailedID(), receiptA.getFurnitureID(), product.getName(), receiptA.getAmount(), receiptA.getPrice()};
             shopList.addRow(dataRA);
         }
-        cartList.setModel(shopList);
     }
 
     public void loadDetail(long receiptAID) {
         DefaultTableModel shopList = (DefaultTableModel) cartList.getModel();
-        
         shopList.setRowCount(0);
         for (receiptEntitiesA receiptA : RDAO.getSpecifics(receiptAID)) {
-            productEntity product = PDAO.getProductByID(receiptAID);
-            Object[] dataA = {receiptA.getFurnitureID(), product.getName(), receiptA.getAmount(), receiptA.getPrice()};
+            productEntity product = PDAO.getProductByID(receiptA.getFurnitureID());
+            Object[] dataA = {receiptA.getDetailedID(), receiptA.getFurnitureID(), product.getName(), receiptA.getAmount(), receiptA.getPrice()};
             shopList.addRow(dataA);
         }
     }
@@ -89,6 +136,7 @@ public class SalesMgrJF extends javax.swing.JFrame {
         this.username = username;
         searchField.setText(tenTaiKhoan);
         displayUsername.setText(username);
+        Search();
     }
 
     private void showPnl(JPanel panel) {
@@ -124,10 +172,8 @@ public class SalesMgrJF extends javax.swing.JFrame {
         addButton = new javax.swing.JButton();
         receiptPanel = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
-        findButton = new javax.swing.JButton();
         displayUsername = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        detailedID = new javax.swing.JLabel();
+        delItem = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -236,6 +282,11 @@ public class SalesMgrJF extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        customerList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                customerListMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(customerList);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -246,11 +297,11 @@ public class SalesMgrJF extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mã NT", "Tên NT", "S. Lượng", "Thành Tiền"
+                "Mã CTHD", "Mã NT", "Tên NT", "S. Lượng", "Thành Tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -258,6 +309,11 @@ public class SalesMgrJF extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(cartList);
+        if (cartList.getColumnModel().getColumnCount() > 0) {
+            cartList.getColumnModel().getColumn(0).setMinWidth(0);
+            cartList.getColumnModel().getColumn(0).setPreferredWidth(0);
+            cartList.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         refreshButton.setText("Làm Mới");
 
@@ -274,16 +330,14 @@ public class SalesMgrJF extends javax.swing.JFrame {
         receiptPanel.setPreferredSize(new java.awt.Dimension(390, 680));
         receiptPanel.setLayout(new java.awt.BorderLayout());
 
-        findButton.setText("Tìm");
-        findButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                findButtonActionPerformed(evt);
-            }
-        });
-
         displayUsername.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        jLabel6.setText("ID:");
+        delItem.setText("Xoá");
+        delItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delItemActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -312,22 +366,18 @@ public class SalesMgrJF extends javax.swing.JFrame {
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(detailedID, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(delItem))
                                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(findButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(refreshButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -355,13 +405,11 @@ public class SalesMgrJF extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(detailedID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel6)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(delItem))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -373,7 +421,6 @@ public class SalesMgrJF extends javax.swing.JFrame {
                                     .addComponent(refreshButton)
                                     .addComponent(addButton)
                                     .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(findButton)
                                     .addComponent(jLabel3))
                                 .addGap(11, 11, 11)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -384,10 +431,6 @@ public class SalesMgrJF extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_findButtonActionPerformed
 
     private void newReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newReceiptActionPerformed
         long accountID = NDAO2.getAccountID(username);
@@ -403,8 +446,9 @@ public class SalesMgrJF extends javax.swing.JFrame {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         int index = productList.getSelectedRow();
-        if (index == -1) {
-            JOptionPane.showMessageDialog(null, "Hãy chọn một nội thất trước khi bạn thêm nó vào hoá đơn nhé.");
+        int indexW = waitingList.getSelectedRow();
+        if (index == -1 || indexW == -1) {
+            JOptionPane.showMessageDialog(null, "Hãy chọn một nội thất hoặc hoá đơn trước khi bạn thêm nó vào hoá đơn nhé.");
         } else {
             String input = JOptionPane.showInputDialog(null, "Hãy nhập số lượng bạn muốn thêm cho " + productList.getValueAt(index, 1), "Thêm", JOptionPane.QUESTION_MESSAGE);
             if (input == null) {
@@ -416,19 +460,22 @@ public class SalesMgrJF extends javax.swing.JFrame {
             }
 
             try {
+
                 int quantity = Integer.parseInt(input);
                 if (quantity <= 0) {
                     JOptionPane.showMessageDialog(null, "Lỗi, số lượng phải là số dương (+)");
                 } else {
-                    long receiptID = 0; //Temporary
+                    long receiptID = Long.parseLong(waitingList.getValueAt(indexW, 0).toString());
                     long productID = Long.parseLong(productList.getValueAt(index, 0).toString());
                     int price = Integer.parseInt(productList.getValueAt(index, 4).toString()) * quantity;
 
                     RDAO.addItemRA(receiptID, productID, quantity, price);
                     this.refreshDetail(receiptID);
+                    this.loadAllat();
+                    newMenu.displayData(Long.parseLong(waitingList.getValueAt(indexW, 0).toString()));
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Không đúng loại số, hãy nhập loại số hợp lệ.");
+                JOptionPane.showMessageDialog(null, "Không đúng loại số, hãy nhập loại số hợp lệ." + e.getMessage());
             }
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -437,14 +484,40 @@ public class SalesMgrJF extends javax.swing.JFrame {
         int selection = waitingList.getSelectedRow();
         if (selection != -1) {
             long receiptID = Long.parseLong(waitingList.getValueAt(selection, 0).toString());
-
-            receiptMenu newMenu = new receiptMenu(this); // create and store reference
             newMenu.displayData(receiptID);              // populate data BEFORE showing
             showPnl(newMenu);                            // then show it
             loadDetail(receiptID);
         }
-        
+
     }//GEN-LAST:event_waitingListMouseClicked
+
+    private void customerListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerListMouseClicked
+        int index = customerList.getSelectedRow();
+        String name = customerList.getValueAt(index, 0).toString();
+        String PN = customerList.getValueAt(index, 1).toString();
+        newMenu.fillCustomerData(name, PN);
+    }//GEN-LAST:event_customerListMouseClicked
+
+    private void delItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delItemActionPerformed
+        int index = cartList.getSelectedRow();
+        int indexW = waitingList.getSelectedRow();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(null, "Chưa chọn nội thất để xoá. Hãy kiểm tra lại.");
+        }
+        else {
+            int option = JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá " + cartList.getValueAt(index, 2) + "?", "Xoá nội thất", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                RDAO.deleteItemRA(Long.parseLong(cartList.getValueAt(index, 0).toString()));
+                JOptionPane.showMessageDialog(null, "Đã xoá " + cartList.getValueAt(index, 2));
+                refreshDetail(Long.parseLong(waitingList.getValueAt(indexW, 0).toString()));
+                loadDetail(Long.parseLong(waitingList.getValueAt(indexW, 0).toString()));
+                newMenu.displayData(Long.parseLong(waitingList.getValueAt(indexW, 0).toString()));
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Không có gì đã thay đổi.");
+            }
+        }
+    }//GEN-LAST:event_delItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -458,9 +531,8 @@ public class SalesMgrJF extends javax.swing.JFrame {
     private javax.swing.JButton addButton;
     private javax.swing.JTable cartList;
     private javax.swing.JTable customerList;
-    private javax.swing.JLabel detailedID;
+    private javax.swing.JButton delItem;
     private javax.swing.JLabel displayUsername;
-    private javax.swing.JButton findButton;
     private javax.swing.JButton interfaceButton;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
@@ -468,7 +540,6 @@ public class SalesMgrJF extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

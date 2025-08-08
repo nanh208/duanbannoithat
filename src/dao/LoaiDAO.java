@@ -9,6 +9,7 @@ import java.util.List;
 import ulti.ConnectDB;
 
 public class LoaiDAO {
+
     public List<LoaiEntity1> getAll() {
         List<LoaiEntity1> list = new ArrayList<>();
         try {
@@ -25,26 +26,46 @@ public class LoaiDAO {
                 list.add(loai);
             }
         } catch (Exception e) {
-            e.printStackTrace();   
+            e.printStackTrace();
         }
         return list;
     }
-    
+
+    public LoaiEntity1 getByName(String ten) {
+        LoaiEntity1 loai = null;
+        try {
+            Connection con = ConnectDB.getConnect();
+            String sql = "SELECT * FROM Loai WHERE ten = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, ten);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                loai = new LoaiEntity1(
+                        rs.getLong("maLoai"),
+                        rs.getString("ten"),
+                        rs.getString("loaiSanPham")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return loai;
+    }
+
     public void insert(LoaiEntity1 ct) {
         try {
             Connection con = ConnectDB.getConnect();
-            String sql = "INSERT INTO Loai (maLoai, ten, loaiSanPham) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Loai (ten, loaiSanPham) VALUES (?, ?)";
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setLong(1, ct.getMaLoai());
-            statement.setString(2, ct.getTen());
-            statement.setString(3, ct.getLoaiSanPham());
+            statement.setString(1, ct.getTen());
+            statement.setString(2, ct.getLoaiSanPham());
             statement.executeUpdate();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Lỗi Insert loại: " + e.getMessage());
         }
     }
-    
-     public void update(LoaiEntity1 ct) {
+
+    public void update(LoaiEntity1 ct) {
         try {
             Connection con = ConnectDB.getConnect();
             String sql = "UPDATE Loai SET ten = ?, loaiSanPham = ? WHERE maLoai = ?";
@@ -57,7 +78,7 @@ public class LoaiDAO {
             System.out.println("Lỗi Update loại: " + e.getMessage());
         }
     }
-    
+
     public void delete(long maLoai) {
         try {
             Connection con = ConnectDB.getConnect();

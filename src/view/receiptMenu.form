@@ -37,14 +37,6 @@
                               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="editButton" max="32767" attributes="0"/>
-                                          <Component id="cancelButton" max="32767" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="payButton" min="-2" pref="250" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
                                       <Component id="jLabel12" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtTotal" min="-2" pref="250" max="-2" attributes="0"/>
@@ -52,11 +44,6 @@
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="txtAmount" min="-2" pref="250" max="-2" attributes="0"/>
-                                          </Group>
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -77,14 +64,28 @@
                                                   <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="txtMoney" min="-2" pref="250" max="-2" attributes="0"/>
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="txtVoucher" min="-2" pref="174" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
+                                                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                                      <Component id="txtVoucher" min="-2" pref="162" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="btnVouch" min="-2" pref="70" max="-2" attributes="0"/>
+                                                      <Component id="applyVouch" min="-2" max="-2" attributes="0"/>
                                                   </Group>
+                                                  <Group type="102" alignment="1" attributes="0">
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="txtMoney" min="-2" pref="250" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="txtAmount" pref="250" max="32767" attributes="0"/>
+                                                  <Component id="txtDesc" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
@@ -127,6 +128,12 @@
                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                       <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="editButton" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="payButton" min="-2" pref="250" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
           </Group>
@@ -168,7 +175,7 @@
                   <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="creationBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtCount" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -178,7 +185,12 @@
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtAmount" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtDesc" min="-2" pref="74" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtMoney" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -187,7 +199,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtVoucher" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnVouch" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="applyVouch" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -199,14 +211,10 @@
                   <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtTotal" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="editButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="payButton" max="32767" attributes="0"/>
+                  <Component id="payButton" pref="60" max="32767" attributes="0"/>
+                  <Component id="editButton" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="37" max="32767" attributes="0"/>
           </Group>
@@ -324,14 +332,6 @@
         <Property name="text" type="java.lang.String" value="S&#x1ed1; L&#x1b0;&#x1ee3;ng NT"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnVouch">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="T&#xec;m"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVouchActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel14">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -364,15 +364,28 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Thanh To&#xe1;n"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="payButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="editButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="C&#x1ead;p Nh&#x1ead;t"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="cancelButton">
+    <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Hu&#x1ef7;"/>
+        <Property name="text" type="java.lang.String" value="M&#xf4; T&#x1ea3;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtDesc">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="applyVouch">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&#xc1;p D&#x1ee5;ng"/>
       </Properties>
     </Component>
   </SubComponents>

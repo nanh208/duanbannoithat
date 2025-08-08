@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import entity.*;
 import dao.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,20 +18,85 @@ import dao.*;
 public class ProdmgmtJP extends javax.swing.JPanel {
 
     ProductDAO PDAO = new ProductDAO();
+    LoaiDAO LDAO = new LoaiDAO();
+
     public ProdmgmtJP() {
         initComponents();
-                JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
         add(lbl);
         this.listItems();
+        this.listTypes();
     }
-    
+
     public void listItems() {
         DefaultTableModel model1 = (DefaultTableModel) prodList.getModel();
+        model1.setRowCount(0);
         for (productEntity product : PDAO.getAllProducts()) {
             Object[] data = {product.getID(), product.getName(), product.getType(), product.getDesc(), product.getPrice()};
             model1.addRow(data);
         }
         prodList.setModel(model1);
+    }
+
+    public void listTypes() {
+        DefaultComboBoxModel model1 = (DefaultComboBoxModel) typeList.getModel();
+        model1.removeAllElements();
+        for (LoaiEntity1 type : LDAO.getAll()) {
+            Object data = String.valueOf(type.getTen());
+            model1.addElement(data);
+        }
+        typeList.setModel(model1);
+    }
+
+    public void showItems(int index) {
+        IDBox.setText(String.valueOf(prodList.getValueAt(index, 0)));
+        NameBox.setText(String.valueOf(prodList.getValueAt(index, 1)));
+        typeList.setSelectedItem(String.valueOf(prodList.getValueAt(index, 2)));
+        DescBox.setText(String.valueOf(prodList.getValueAt(index, 3)));
+        PriceBox.setText(String.valueOf(prodList.getValueAt(index, 4)));
+    }
+
+    public void updateItem() {
+        long ID = Long.parseLong(IDBox.getText());
+        LoaiEntity1 type = LDAO.getByName(typeList.getSelectedItem().toString());
+        long typeID = type.getMaLoai();
+        String desc = DescBox.getText();
+        int price = Integer.parseInt(PriceBox.getText());
+        String name = NameBox.getText();
+        productEntity product = new productEntity(ID, typeID, name, desc, price);
+
+        int choice = JOptionPane.showConfirmDialog(null, "Bạn có muốn cập nhật cho " + name + " không?", "Cập nhật sản phẩm", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            PDAO.updateProduct(product);
+            JOptionPane.showMessageDialog(null, "Cập nhật thành công.");
+        }
+    }
+
+    public void addItem() {
+        int option = JOptionPane.showConfirmDialog(null, "Thêm " + NameBox.getText() + "?", "Thêm nội thất", JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+            LoaiEntity1 type = LDAO.getByName(typeList.getSelectedItem().toString());
+            long typeID = type.getMaLoai();
+            String desc = DescBox.getText();
+            int price = Integer.parseInt(PriceBox.getText());
+            String name = NameBox.getText();
+            productEntity product = new productEntity(typeID, name, desc, price);
+            PDAO.addProduct(product);
+            JOptionPane.showMessageDialog(null, "Thêm nội thất thành công.");
+        }
+        listItems();
+        
+    }
+
+    public void delItem(long ID) {
+
+        int choice = JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá không?", "Xoá nội thất", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            PDAO.deleteProduct(ID);
+            JOptionPane.showMessageDialog(null, "Nội thất xoá thành công.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nội thất đã không xoá.");
+        }
     }
 
     /**
@@ -42,23 +109,21 @@ public class ProdmgmtJP extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        txtMaNT = new javax.swing.JTextField();
+        IDBox = new javax.swing.JTextField();
         addBtn = new javax.swing.JButton();
         delButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         prodList = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtMaNT1 = new javax.swing.JTextField();
-        txtMaNT2 = new javax.swing.JTextField();
+        NameBox = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtMaNT3 = new javax.swing.JTextField();
+        DescBox = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtMaNT4 = new javax.swing.JTextField();
+        PriceBox = new javax.swing.JTextField();
         fixBtn = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        txtMaNT5 = new javax.swing.JTextField();
+        typeList = new javax.swing.JComboBox<>();
 
         setMaximumSize(new java.awt.Dimension(800, 500));
         setMinimumSize(new java.awt.Dimension(800, 500));
@@ -67,10 +132,11 @@ public class ProdmgmtJP extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Mã nội thất");
 
-        txtMaNT.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        IDBox.setEditable(false);
+        IDBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         addBtn.setBackground(new java.awt.Color(0, 204, 0));
-        addBtn.setText("mua");
+        addBtn.setText("Thêm");
         addBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
@@ -79,13 +145,15 @@ public class ProdmgmtJP extends javax.swing.JPanel {
 
         delButton.setBackground(new java.awt.Color(204, 0, 0));
         delButton.setText("Xoá");
+        delButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delButtonActionPerformed(evt);
+            }
+        });
 
         prodList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Mã Nội Thất", "Tên Nội Thất", "Tên Loại", "Mô Tả", "Giá"
@@ -99,6 +167,11 @@ public class ProdmgmtJP extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        prodList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prodListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(prodList);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -107,9 +180,7 @@ public class ProdmgmtJP extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Tên Nội Thất");
 
-        txtMaNT1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        txtMaNT2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NameBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Tên Loại");
@@ -117,19 +188,19 @@ public class ProdmgmtJP extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Mô Tả");
 
-        txtMaNT3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        DescBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Giá");
 
-        txtMaNT4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        PriceBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         fixBtn.setText("Sửa");
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel9.setText("Voucher");
-
-        txtMaNT5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        fixBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fixBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -144,15 +215,15 @@ public class ProdmgmtJP extends javax.swing.JPanel {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel1)
                                     .addGap(18, 18, 18)
-                                    .addComponent(txtMaNT, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(IDBox, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabel3)
                                         .addComponent(jLabel4))
                                     .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtMaNT2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtMaNT1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(NameBox, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                                        .addComponent(typeList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,16 +235,12 @@ public class ProdmgmtJP extends javax.swing.JPanel {
                                 .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(30, 30, 30)
-                                .addComponent(txtMaNT4, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(PriceBox, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtMaNT3, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtMaNT5, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(DescBox, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -187,31 +254,25 @@ public class ProdmgmtJP extends javax.swing.JPanel {
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(txtMaNT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(IDBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMaNT1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMaNT2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE))
+                            .addComponent(jLabel4)
+                            .addComponent(typeList, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel5)
-                                .addComponent(txtMaNT3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel9)
-                                    .addComponent(txtMaNT5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtMaNT4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(DescBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(PriceBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(addBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -220,16 +281,40 @@ public class ProdmgmtJP extends javax.swing.JPanel {
                                 .addComponent(fixBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        // TODO add your handling code here:
+        addItem();
     }//GEN-LAST:event_addBtnActionPerformed
+
+    private void delButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delButtonActionPerformed
+        int index = prodList.getSelectedRow();
+        if (index != -1) {
+            long ID = Long.parseLong(prodList.getValueAt(index, 0).toString());
+            delItem(ID);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Xin hãy chọn nội thất ở bảng bên dưới.");
+        }
+    }//GEN-LAST:event_delButtonActionPerformed
+
+    private void fixBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fixBtnActionPerformed
+        updateItem();
+    }//GEN-LAST:event_fixBtnActionPerformed
+
+    private void prodListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodListMouseClicked
+        int index = prodList.getSelectedRow();
+        showItems(index);
+    }//GEN-LAST:event_prodListMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField DescBox;
+    private javax.swing.JTextField IDBox;
+    private javax.swing.JTextField NameBox;
+    private javax.swing.JTextField PriceBox;
     private javax.swing.JButton addBtn;
     private javax.swing.JButton delButton;
     private javax.swing.JButton fixBtn;
@@ -239,14 +324,8 @@ public class ProdmgmtJP extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable prodList;
-    private javax.swing.JTextField txtMaNT;
-    private javax.swing.JTextField txtMaNT1;
-    private javax.swing.JTextField txtMaNT2;
-    private javax.swing.JTextField txtMaNT3;
-    private javax.swing.JTextField txtMaNT4;
-    private javax.swing.JTextField txtMaNT5;
+    private javax.swing.JComboBox<String> typeList;
     // End of variables declaration//GEN-END:variables
 }
