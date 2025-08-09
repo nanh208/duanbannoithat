@@ -111,11 +111,13 @@ public class VoucherDao {
     public void update(vouCher vc) {
         try {
             Connection con = ConnectDB.getConnect();
-            String sql = "UPDATE Vouchers SET moTa = ?, giamGia = ? WHERE maVouch = ?";
+            String sql = "UPDATE Vouchers SET moTa = ?, giamGia = ?, active = ? WHERE maVouch = ?";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, vc.getMoTa());
             statement.setInt(2, vc.getGiamGia());
-            statement.setLong(3, vc.getMaVouch());
+            statement.setLong(4, vc.getMaVouch());
+            statement.setBoolean(3, vc.isStatus());
+            
 
             statement.execute();
 
