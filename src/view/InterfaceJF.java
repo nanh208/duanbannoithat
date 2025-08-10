@@ -6,7 +6,7 @@ package view;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import ulti.ConnectDB;
+import ulti.ConnectDB;  
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;

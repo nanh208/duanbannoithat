@@ -24,6 +24,7 @@ import javax.swing.table.TableRowSorter;
 public class AccountJP extends javax.swing.JPanel {
     int row;
     TaiKhoanNVDAO dao = new TaiKhoanNVDAO();
+    List<NhanVienEntity> listNV = dao.getAll();
     /**
      * Creates new form TaiKhoanNhanVien
      */
@@ -39,13 +40,14 @@ public class AccountJP extends javax.swing.JPanel {
     model.setRowCount(0); 
 
     for (NhanVienEntity nv : dao.getAll()) {
+        String Password = "********";
         Object row[] = {
             nv.getTenTK(),    
             nv.getMaTK(),      
             nv.getEmail(),      
             nv.getSdt(),        
             nv.getNamSinh(),    
-            nv.getPassword(),   
+            Password,
             nv.getPermission()  
         };
         model.addRow(row);
@@ -113,9 +115,8 @@ public class AccountJP extends javax.swing.JPanel {
     }
 }
     
-    public boolean kiemTraTrungEmailPasswordSDT(String email, String password, int sdt) {
+    public boolean kiemTraTrungEmailSDT(String email, int sdt) {
     boolean emailTrung = false;
-    boolean passwordTrung = false;
     boolean sdtTrung = false;
 
     List<NhanVienEntity> listNV = dao.getAll();
@@ -124,38 +125,23 @@ public class AccountJP extends javax.swing.JPanel {
         if (nv.getEmail().equalsIgnoreCase(email)) {
             emailTrung = true;
         }
-        if (nv.getPassword().equals(password)) {
-            passwordTrung = true;
-        }
         if (nv.getSdt() == sdt) {
             sdtTrung = true;
         }
     }
 
-    if (emailTrung && passwordTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Email, mật khẩu và số điện thoại đã tồn tại!");
-        return true; 
-    } else if (emailTrung && passwordTrung) {
-        JOptionPane.showMessageDialog(null, "Email và mật khẩu đã tồn tại!");
-        return true;
-    } else if (emailTrung && sdtTrung) {
+    if (emailTrung && sdtTrung) {
         JOptionPane.showMessageDialog(null, "Email và số điện thoại đã tồn tại!");
-        return true;
-    } else if (passwordTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Mật khẩu và số điện thoại đã tồn tại!");
         return true;
     } else if (emailTrung) {
         JOptionPane.showMessageDialog(null, "Email đã tồn tại!");
-        return true;
-    } else if (passwordTrung) {
-        JOptionPane.showMessageDialog(null, "Mật khẩu đã tồn tại!");
         return true;
     } else if (sdtTrung) {
         JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
         return true;
     }
 
-    return false; // không trùng, cho phép thêm
+    return false; // Không trùng => cho phép thêm
 }
     public void resetSearch(){
         txtTimkiem.getDocument().addDocumentListener(new DocumentListener() {
@@ -171,18 +157,30 @@ public class AccountJP extends javax.swing.JPanel {
                 timKiem();
             }
 
-            public void timKiem() {
-                String tuKhoa = txtTimkiem.getText().trim();
-                DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
-                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-                tblNhanVien.setRowSorter(sorter);
+            private void timKiem() {
+    String tuKhoa = txtTimkiem.getText().trim().toLowerCase();
+    DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+    model.setRowCount(0); // Xóa dữ liệu cũ
 
-                if (tuKhoa.isEmpty()) {
-                    sorter.setRowFilter(null);
-                } else {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa));
-                }
-            }
+    for (NhanVienEntity nv : listNV) {
+        String maNV = String.valueOf(nv.getMaTK());
+        String tenNV = nv.getTenTK().toLowerCase();
+        if (tuKhoa.isEmpty() ||
+            maNV.contains(tuKhoa) ||
+            tenNV.contains(tuKhoa)) {
+
+            model.addRow(new Object[]{               
+                nv.getTenTK(),
+                nv.getMaTK(),
+                nv.getEmail(),
+                nv.getSdt(),
+                nv.getNamSinh(),
+                "********", 
+                nv.getPermission()
+            });
+        }
+    }
+}
         });
     }
     /**
@@ -205,7 +203,6 @@ public class AccountJP extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         txtNamSinh = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         rdoNhanVien = new javax.swing.JRadioButton();
         rdoQuanLy = new javax.swing.JRadioButton();
@@ -218,6 +215,7 @@ public class AccountJP extends javax.swing.JPanel {
         txtTenTK = new javax.swing.JTextField();
         txtTimkiem = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
 
         setMaximumSize(new java.awt.Dimension(800, 500));
         setMinimumSize(new java.awt.Dimension(800, 500));
@@ -264,12 +262,6 @@ public class AccountJP extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Mật Khẩu");
-
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Quyền");
@@ -345,6 +337,8 @@ public class AccountJP extends javax.swing.JPanel {
 
         jLabel9.setText("TÌm kiếm");
 
+        txtPassword.setText("jPasswordField1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,16 +350,14 @@ public class AccountJP extends javax.swing.JPanel {
                         .addComponent(jLabel1)
                         .addGap(16, 16, 16))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMaTK, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtMaTK, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                             .addComponent(jLabel3)
-                            .addComponent(txtSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSDT, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(txtNamSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
+                            .addComponent(txtNamSinh, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -379,8 +371,10 @@ public class AccountJP extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnThem))
                             .addComponent(jLabel8)
-                            .addComponent(txtTenTK, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
+                            .addComponent(txtTenTK, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel6)
+                            .addComponent(txtPassword))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
@@ -422,7 +416,7 @@ public class AccountJP extends javax.swing.JPanel {
                         .addComponent(txtNamSinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(8, 8, 8)
                         .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -434,7 +428,7 @@ public class AccountJP extends javax.swing.JPanel {
                             .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(119, Short.MAX_VALUE))
+                        .addContainerGap(117, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -455,10 +449,6 @@ public class AccountJP extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNamSinhActionPerformed
 
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
-
     private void rdoNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoNhanVienActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rdoNhanVienActionPerformed
@@ -471,7 +461,7 @@ public class AccountJP extends javax.swing.JPanel {
        NhanVienEntity nv = getNhanVien();
 if (nv == null) return; // lỗi nhập ngày hoặc sdt sai
 
-if (!kiemTraTrungEmailPasswordSDT(nv.getEmail(), nv.getPassword(), nv.getSdt())) {
+if (!kiemTraTrungEmailSDT(nv.getEmail(), nv.getSdt())) {
     dao.insert(nv);
     JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
     fillTable();
@@ -564,7 +554,7 @@ this.row = tblNhanVien.getSelectedRow();
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMaTK;
     private javax.swing.JTextField txtNamSinh;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtTenTK;
     private javax.swing.JTextField txtTimkiem;
