@@ -115,8 +115,9 @@ public class AccountJP extends javax.swing.JPanel {
     }
 }
     
-    public boolean kiemTraTrungEmailSDT(String email, int sdt) {
+    public boolean kiemTraTrungEmailPasswordSDT(String email, String password, int sdt) {
     boolean emailTrung = false;
+    boolean passwordTrung = false;
     boolean sdtTrung = false;
 
     List<NhanVienEntity> listNV = dao.getAll();
@@ -125,23 +126,38 @@ public class AccountJP extends javax.swing.JPanel {
         if (nv.getEmail().equalsIgnoreCase(email)) {
             emailTrung = true;
         }
+        if (nv.getPassword().equals(password)) {
+            passwordTrung = true;
+        }
         if (nv.getSdt() == sdt) {
             sdtTrung = true;
         }
     }
 
-    if (emailTrung && sdtTrung) {
+    if (emailTrung && passwordTrung && sdtTrung) {
+        JOptionPane.showMessageDialog(null, "Email, mật khẩu và số điện thoại đã tồn tại!");
+        return true; 
+    } else if (emailTrung && passwordTrung) {
+        JOptionPane.showMessageDialog(null, "Email và mật khẩu đã tồn tại!");
+        return true;
+    } else if (emailTrung && sdtTrung) {
         JOptionPane.showMessageDialog(null, "Email và số điện thoại đã tồn tại!");
+        return true;
+    } else if (passwordTrung && sdtTrung) {
+        JOptionPane.showMessageDialog(null, "Mật khẩu và số điện thoại đã tồn tại!");
         return true;
     } else if (emailTrung) {
         JOptionPane.showMessageDialog(null, "Email đã tồn tại!");
+        return true;
+    } else if (passwordTrung) {
+        JOptionPane.showMessageDialog(null, "Mật khẩu đã tồn tại!");
         return true;
     } else if (sdtTrung) {
         JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
         return true;
     }
 
-    return false; // Không trùng => cho phép thêm
+    return false; // không trùng, cho phép thêm
 }
     public void resetSearch(){
         txtTimkiem.getDocument().addDocumentListener(new DocumentListener() {
@@ -461,7 +477,7 @@ public class AccountJP extends javax.swing.JPanel {
        NhanVienEntity nv = getNhanVien();
 if (nv == null) return; // lỗi nhập ngày hoặc sdt sai
 
-if (!kiemTraTrungEmailSDT(nv.getEmail(), nv.getSdt())) {
+if (!kiemTraTrungEmailPasswordSDT(nv.getEmail(), nv.getPassword(), nv.getSdt())) {
     dao.insert(nv);
     JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
     fillTable();
