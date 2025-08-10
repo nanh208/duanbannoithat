@@ -115,9 +115,9 @@ public class AccountJP extends javax.swing.JPanel {
     }
 }
     
-    public boolean kiemTraTrungEmailPasswordSDT(String email, String password, int sdt) {
+    public boolean kiemTraTrungEmailPasswordSDT(String email, String tenTK, int sdt) {
     boolean emailTrung = false;
-    boolean passwordTrung = false;
+    boolean tenTKTrung = false;
     boolean sdtTrung = false;
 
     List<NhanVienEntity> listNV = dao.getAll();
@@ -126,38 +126,38 @@ public class AccountJP extends javax.swing.JPanel {
         if (nv.getEmail().equalsIgnoreCase(email)) {
             emailTrung = true;
         }
-        if (nv.getPassword().equals(password)) {
-            passwordTrung = true;
+        if (nv.getTenTK().equalsIgnoreCase(tenTK)) {
+            tenTKTrung = true;
         }
         if (nv.getSdt() == sdt) {
             sdtTrung = true;
         }
     }
 
-    if (emailTrung && passwordTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Email, mật khẩu và số điện thoại đã tồn tại!");
-        return true; 
-    } else if (emailTrung && passwordTrung) {
-        JOptionPane.showMessageDialog(null, "Email và mật khẩu đã tồn tại!");
+    if (emailTrung && tenTKTrung && sdtTrung) {
+        JOptionPane.showMessageDialog(null, "Email, tên tài khoản và số điện thoại đã tồn tại!");
+        return true;
+    } else if (emailTrung && tenTKTrung) {
+        JOptionPane.showMessageDialog(null, "Email và tên tài khoản đã tồn tại!");
         return true;
     } else if (emailTrung && sdtTrung) {
         JOptionPane.showMessageDialog(null, "Email và số điện thoại đã tồn tại!");
         return true;
-    } else if (passwordTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Mật khẩu và số điện thoại đã tồn tại!");
+    } else if (tenTKTrung && sdtTrung) {
+        JOptionPane.showMessageDialog(null, "Tên tài khoản và số điện thoại đã tồn tại!");
         return true;
     } else if (emailTrung) {
         JOptionPane.showMessageDialog(null, "Email đã tồn tại!");
         return true;
-    } else if (passwordTrung) {
-        JOptionPane.showMessageDialog(null, "Mật khẩu đã tồn tại!");
+    } else if (tenTKTrung) {
+        JOptionPane.showMessageDialog(null, "Tên tài khoản đã tồn tại!");
         return true;
     } else if (sdtTrung) {
         JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
         return true;
     }
 
-    return false; // không trùng, cho phép thêm
+    return false;
 }
     public void resetSearch(){
         txtTimkiem.getDocument().addDocumentListener(new DocumentListener() {
@@ -477,7 +477,7 @@ public class AccountJP extends javax.swing.JPanel {
        NhanVienEntity nv = getNhanVien();
 if (nv == null) return; // lỗi nhập ngày hoặc sdt sai
 
-if (!kiemTraTrungEmailPasswordSDT(nv.getEmail(), nv.getPassword(), nv.getSdt())) {
+if (!kiemTraTrungEmailPasswordSDT(nv.getEmail(), nv.getTenTK(), nv.getSdt())) {
     dao.insert(nv);
     JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
     fillTable();
