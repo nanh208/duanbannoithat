@@ -18,19 +18,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TypeJP extends javax.swing.JPanel {
 
-   LoaiDAO dao = new LoaiDAO();
-   int row;
+    LoaiDAO dao = new LoaiDAO();
+    int row;
 
     public TypeJP() {
         initComponents();
-                JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
+        JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
         add(lbl);
         fillTable();
     }
-    public void fillTable(){
+
+    public void fillTable() {
         DefaultTableModel model = (DefaultTableModel) tblLoai.getModel();
         model.setRowCount(0);
-        try{
+        try {
             List<LoaiEntity1> list = dao.getAll();
             for (LoaiEntity1 entity : list) {
                 model.addRow(new Object[]{
@@ -43,35 +44,34 @@ public class TypeJP extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi truy vấn dữ liệu");
         }
     }
-    
+
     public void setForm(LoaiEntity1 entity) {
         txtMaLoai.setText(String.valueOf(entity.getMaLoai()));
         txtTen.setText(entity.getTen());
         txtLoaiSP.setText(entity.getLoaiSanPham());
     }
-    
+
     public LoaiEntity1 getForm() {
         try {
             String ten = txtTen.getText().trim();
             String loaiSanPham = txtLoaiSP.getText().trim();
+            if (!txtMaLoai.getText().trim().isEmpty()) {
+                long maLoai = Long.parseLong(txtMaLoai.getText().trim());
+                return new LoaiEntity1(maLoai, ten, loaiSanPham);
+            }
             return new LoaiEntity1(ten, loaiSanPham);
-        }catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng");
             return null;
         }
     }
-    
+
     private void clearForm() {
         txtMaLoai.setText("");
         txtTen.setText("");
         txtLoaiSP.setText("");
     }
-    
-    
-    
 
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -291,11 +291,12 @@ public class TypeJP extends javax.swing.JPanel {
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         LoaiEntity1 entity = getForm();
-          if (entity != null) {
-              this.dao.update(entity);
-              fillTable();
-              JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-          }
+        if (entity != null) {
+            this.dao.update(entity);
+            fillTable();
+            clearForm();
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
