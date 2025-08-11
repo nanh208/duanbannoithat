@@ -25,14 +25,14 @@ public class TaiKhoanNVDAO {
             PreparedStatement statement  = con.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                NhanVienEntity ban = new NhanVienEntity(result.getLong("maTaiKhoan"),
+                NhanVienEntity nv = new NhanVienEntity(result.getLong("maTaiKhoan"),
                     result.getString("password"),
                     result.getString("tenTaiKhoan"),
                     result.getString("Email"),
                     result.getString("permission"),
                     result.getInt("SDT"),
                     result.getDate("namSinh"));
-                list.add(ban);
+                list.add(nv);
             }
         } catch (Exception e) {
             

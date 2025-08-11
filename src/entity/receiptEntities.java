@@ -29,8 +29,20 @@ public class receiptEntities {
         this.total = total;
         this.status = status;
         this.voucherID = voucherID;
+        
+        
     }
 
+    public receiptEntities(long ID, long CustomerID, String desc, int total, boolean status, long voucherID) {
+        this.ID = ID;
+        this.CustomerID = CustomerID;
+        this.desc = desc;
+        this.total = total;
+        this.status = status;
+        this.voucherID = voucherID;
+    }
+
+   
     public receiptEntities(long ID, long CustomerID, long AccountID, String datetime, String desc, int total, boolean status, long voucherID) {
         this.ID = ID;
         this.CustomerID = CustomerID;

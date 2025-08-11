@@ -83,7 +83,7 @@ public class VoucherJP extends javax.swing.JPanel {
                 Giamgia = 10;
             }
             String Mota = txtMota.getText().trim();
-            return new vouCher(maVoucher, Mota, Giamgia, true);
+            return new vouCher(maVoucher, Mota, Giamgia, false);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Mã tài khoản không hợp lệ");
             return null;
@@ -327,6 +327,7 @@ public class VoucherJP extends javax.swing.JPanel {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Mã voucher  không hợp lệ");
         }
+        fillTable();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void txttimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttimKiemActionPerformed

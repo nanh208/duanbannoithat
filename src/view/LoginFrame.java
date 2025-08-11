@@ -4,9 +4,11 @@
  */
 package view;
 
+import entity.NhanVienEntity;
 import javax.swing.*;
 import java.sql.*;
 import ulti.ConnectDB;
+import ulti.Global;
 
 public class LoginFrame extends javax.swing.JFrame {
 
@@ -23,7 +25,7 @@ public class LoginFrame extends javax.swing.JFrame {
         String tk = txtTenTaiKhoan.getText().trim();
         String mk = new String(txtMatKhau.getPassword()).trim();
 
-      try (Connection con = ConnectDB.getConnect()) {
+        try (Connection con = ConnectDB.getConnect()) {
             String sql = "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, tk);
@@ -33,11 +35,17 @@ public class LoginFrame extends javax.swing.JFrame {
             if (rs.next()) {
                 String quyen = rs.getString("permission");
                 JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
-
+                NhanVienEntity nv = new NhanVienEntity(rs.getString("password"), rs.getString("tenTaiKhoan"),
+                        rs.getString("Email"), rs.getString("permission"), rs.getInt("SDT"), rs.getDate("namSinh"));
+                Global.nv = nv;
                 if ("Nhân Viên".equalsIgnoreCase(quyen)) {
-                    new SalesMgrJF(tk).setVisible(true);  // Truyền tên tài khoản vào
+                    new SalesMgrJF(tk, false).setVisible(true);
+                    System.out.println("Username: " + tk);// Truyền tên tài khoản vào
+                    System.out.println("Password: " + mk);
                 } else if ("Quản Lý".equalsIgnoreCase(quyen)) {
                     new InterfaceJF(tk).setVisible(true);
+                    System.out.println("Username: " + tk);// Truyền tên tài khoản vào
+                    System.out.println("Password: " + mk);
                 } else {
                     JOptionPane.showMessageDialog(this, "Không xác định được quyền truy cập.");
                     return;
@@ -50,9 +58,11 @@ public class LoginFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
     }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -155,7 +165,7 @@ public class LoginFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
-         JOptionPane.showMessageDialog(rootPane, "Hỏi quản trị viên đi lmao");
+        JOptionPane.showMessageDialog(rootPane, "Hỏi quản trị viên đi lmao");
     }//GEN-LAST:event_btnDangKyActionPerformed
 
     private void txtTenTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenTaiKhoanActionPerformed

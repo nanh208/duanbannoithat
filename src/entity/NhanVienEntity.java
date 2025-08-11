@@ -25,6 +25,15 @@ public class NhanVienEntity {
     public NhanVienEntity(long maTK) {
         this.maTK = maTK;
     }
+
+    public NhanVienEntity(long maTK, String tenTK, String email, String permission, int sdt, Date namSinh) {
+        this.maTK = maTK;
+        this.tenTK = tenTK;
+        this.email = email;
+        this.permission = permission;
+        this.sdt = sdt;
+        this.namSinh = namSinh;
+    }
     
     public NhanVienEntity(long maTK, String password, String tenTK, String email, String permission, int sdt, Date namSinh) {
         this.maTK = maTK;

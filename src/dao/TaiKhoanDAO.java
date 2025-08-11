@@ -33,7 +33,8 @@ public class TaiKhoanDAO {
 
     public long getAccountID(String username) {
         String query = "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan = ?";
-        try (Connection con = ConnectDB.getConnect(); PreparedStatement statement = con.prepareStatement(query)) {
+        try (Connection con = ConnectDB.getConnect(); 
+            PreparedStatement statement = con.prepareStatement(query)) {
 
             statement.setString(1, username);
 
@@ -49,4 +50,55 @@ public class TaiKhoanDAO {
         }
         return 0;
     }
+
+    public String getAccountName(long accountId) {
+        String query = "SELECT tenTaiKhoan FROM TaiKhoanNV WHERE maTaiKhoan = ?";
+
+        try (Connection con = ConnectDB.getConnect(); PreparedStatement statement = con.prepareStatement(query)) {
+
+            statement.setLong(1, accountId);
+
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return result.getString("tenTaiKhoan");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Không thể tìm thấy tài khoản theo tên.. \nHãy báo cho quản trị viên để hỗ trợ. ");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null; // Return null if not found or error
+    }
+
+    public NhanVienEntity getAccountInfo(long maTaiKhoan) {
+        String query = "SELECT * FROM TaiKhoanNV WHERE maTaiKhoan = ?";
+
+        try (Connection con = ConnectDB.getConnect(); 
+            PreparedStatement statement = con.prepareStatement(query)) {
+
+            statement.setLong(1, maTaiKhoan);
+
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                String tenTK = result.getString("tenTaiKhoan");
+                String email = result.getString("Email");
+                String permission = result.getString("permission");
+                int sdt = result.getInt("SDT");
+                Date namSinh = result.getDate("namSinh"); // java.sql.Date is fine
+
+                return new NhanVienEntity(maTaiKhoan, tenTK, email, permission, sdt, namSinh);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Không thể tìm thấy tài khoản theo mã. \nHãy báo cho quản trị viên để hỗ trợ.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if not found or error
+    }
+
 }

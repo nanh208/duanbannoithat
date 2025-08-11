@@ -372,6 +372,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="C&#x1ead;p Nh&#x1ead;t"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -387,6 +390,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&#xc1;p D&#x1ee5;ng"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="applyVouchActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

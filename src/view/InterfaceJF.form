@@ -33,23 +33,24 @@
                   <Component id="jTextField1" alignment="0" max="32767" attributes="0"/>
                   <Component id="tblVouchers" alignment="0" max="32767" attributes="0"/>
                   <Component id="tblloai" alignment="0" max="32767" attributes="0"/>
-                  <Component id="tblchitiensanpham" alignment="0" max="32767" attributes="0"/>
                   <Component id="btlquanlysanpham" alignment="0" max="32767" attributes="0"/>
-                  <Component id="QLKHbtn" alignment="0" pref="229" max="32767" attributes="0"/>
+                  <Component id="QLKHbtn" alignment="0" pref="230" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="32" max="32767" attributes="0"/>
                       <Component id="connectStatus" min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="QLNVbtn" alignment="0" pref="229" max="32767" attributes="0"/>
+                  <Component id="QLNVbtn" alignment="0" pref="230" max="32767" attributes="0"/>
                   <Component id="tblthoat1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="tblBack" min="-2" pref="89" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="dashboardBtn" min="-2" pref="99" max="-2" attributes="0"/>
                   </Group>
                   <Component id="manageFurnitureBtn" max="32767" attributes="0"/>
+                  <Component id="QLHDbtn" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Component id="pnlMain" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -71,21 +72,24 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTextField1" min="-2" pref="46" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-              <Component id="btlquanlysanpham" min="-2" pref="33" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="QLKHbtn" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Component id="btlquanlysanpham" min="-2" pref="48" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="QLNVbtn" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="tblchitiensanpham" min="-2" pref="33" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="QLKHbtn" min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Component id="tblloai" min="-2" pref="33" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="tblVouchers" min="-2" pref="33" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="manageFurnitureBtn" min="-2" pref="36" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="QLHDbtn" min="-2" pref="35" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="tblBack" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tblBack" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="dashboardBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="tblthoat1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -115,19 +119,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btlquanlysanphamActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="tblchitiensanpham">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Chi ti&#x1ebf;t s&#x1ea3;n ph&#x1ea9;m"/>
-        <Property name="horizontalAlignment" type="int" value="2"/>
-      </Properties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblchitiensanphamMouseClicked"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tblchitiensanphamActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JButton" name="tblloai">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Lo&#x1ea1;i"/>
+        <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n L&#xfd; Lo&#x1ea1;i"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
       </Properties>
       <Events>
@@ -137,16 +131,17 @@
     </Component>
     <Component class="javax.swing.JButton" name="tblVouchers">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Vouchers"/>
+        <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n L&#xfd; Voucher"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblVouchersMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tblVouchersActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="tblBack">
       <Properties>
-        <Property name="text" type="java.lang.String" value="BACK"/>
+        <Property name="text" type="java.lang.String" value="Quay L&#x1ea1;i"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblBackMouseClicked"/>
@@ -226,6 +221,24 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="manageFurnitureBtnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="dashboardBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng K&#xea;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dashboardBtnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="QLHDbtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n L&#xfd; Ho&#xe1; &#x110;&#x1a1;n"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="horizontalTextPosition" type="int" value="2"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="QLHDbtnActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -40,13 +40,13 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtMaTK" alignment="0" pref="262" max="32767" attributes="0"/>
-                          <Component id="txtEmail" alignment="0" pref="262" max="32767" attributes="0"/>
+                          <Component id="txtMaTK" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtEmail" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtSDT" alignment="0" pref="262" max="32767" attributes="0"/>
+                          <Component id="txtSDT" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtNamSinh" alignment="0" pref="262" max="32767" attributes="0"/>
+                          <Component id="txtNamSinh" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -62,14 +62,14 @@
                               <Component id="btnThem" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtTenTK" alignment="0" pref="262" max="32767" attributes="0"/>
+                          <Component id="txtTenTK" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="txtPassword" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="487" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="485" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -114,7 +114,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtNamSinh" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel6" min="-2" pref="20" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Component id="txtPassword" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -131,7 +131,7 @@
                       </Group>
                       <EmptySpace pref="117" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" pref="502" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="498" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -151,10 +151,13 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="M&#xe3; T&#xe0;i Kho&#xe0;n"/>
+        <Property name="text" type="java.lang.String" value="M&#xe3; T&#xe0;i Kho&#xe0;n (Auto)"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtMaTK">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMaTKActionPerformed"/>
       </Events>
@@ -203,7 +206,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="M&#x1ead;t Kh&#x1ea9;u"/>
+        <Property name="text" type="java.lang.String" value="M&#x1ead;t Kh&#x1ea9;u (Nh&#x1ead;p L&#x1ea1;i Tr&#x1b0;&#x1edb;c Khi S&#x1eed;a)"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
@@ -353,9 +356,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtPassword">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -6,10 +6,12 @@ package view;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import ulti.ConnectDB;  
+import ulti.ConnectDB;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import entity.NhanVienEntity;
+import dao.TaiKhoanDAO;
 
 /**
  *
@@ -18,6 +20,7 @@ import javax.swing.Timer;
 public class InterfaceJF extends javax.swing.JFrame {
 
     private String tenTaiKhoan;
+    private TaiKhoanDAO account = new TaiKhoanDAO();
 
     public InterfaceJF(String tenTaiKhoan) {
         this.tenTaiKhoan = tenTaiKhoan;
@@ -26,6 +29,7 @@ public class InterfaceJF extends javax.swing.JFrame {
         jTextField1.setText(tenTaiKhoan);
         pnlMain.setLayout(new BorderLayout());
         showPanel(new DashboardJP1());
+        permissionCheck();
     }
 
     private void showPanel(JPanel panel) {
@@ -35,19 +39,12 @@ public class InterfaceJF extends javax.swing.JFrame {
         pnlMain.repaint();
     }
 
-    private boolean connectToDB() {
-        connectStatus.setText("Connecting...");
-        try (Connection connect = ConnectDB.getConnect()) {
-            if (connect != null) {
-                connectStatus.setText("Connection successful.");
-                return true;
-            }
-        } catch (Exception e) {
-            System.out.println("Connection failed." + e);
-            connectStatus.setText("Connection failed.");
-            return false;
+    private void permissionCheck() {
+        long accountID = account.getAccountID(tenTaiKhoan);
+        NhanVienEntity employee = account.getAccountInfo(accountID);
+        if (employee.getPermission().equals("Nhân Viên")) {
+            QLNVbtn.setEnabled(false);
         }
-        return true;
     }
 
     @SuppressWarnings("unchecked")
@@ -56,7 +53,6 @@ public class InterfaceJF extends javax.swing.JFrame {
 
         QLKHbtn = new javax.swing.JButton();
         btlquanlysanpham = new javax.swing.JButton();
-        tblchitiensanpham = new javax.swing.JButton();
         tblloai = new javax.swing.JButton();
         tblVouchers = new javax.swing.JButton();
         tblBack = new javax.swing.JButton();
@@ -67,6 +63,8 @@ public class InterfaceJF extends javax.swing.JFrame {
         tblthoat1 = new javax.swing.JButton();
         QLNVbtn = new javax.swing.JButton();
         manageFurnitureBtn = new javax.swing.JButton();
+        dashboardBtn = new javax.swing.JButton();
+        QLHDbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1200, 600));
@@ -99,20 +97,7 @@ public class InterfaceJF extends javax.swing.JFrame {
             }
         });
 
-        tblchitiensanpham.setText("Chi tiết sản phẩm");
-        tblchitiensanpham.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        tblchitiensanpham.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblchitiensanphamMouseClicked(evt);
-            }
-        });
-        tblchitiensanpham.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tblchitiensanphamActionPerformed(evt);
-            }
-        });
-
-        tblloai.setText("Loại");
+        tblloai.setText("Quản Lý Loại");
         tblloai.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         tblloai.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -125,15 +110,20 @@ public class InterfaceJF extends javax.swing.JFrame {
             }
         });
 
-        tblVouchers.setText("Vouchers");
+        tblVouchers.setText("Quản Lý Voucher");
         tblVouchers.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         tblVouchers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblVouchersMouseClicked(evt);
             }
         });
+        tblVouchers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tblVouchersActionPerformed(evt);
+            }
+        });
 
-        tblBack.setText("BACK");
+        tblBack.setText("Quay Lại");
         tblBack.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblBackMouseClicked(evt);
@@ -207,6 +197,22 @@ public class InterfaceJF extends javax.swing.JFrame {
             }
         });
 
+        dashboardBtn.setText("Thống Kê");
+        dashboardBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dashboardBtnActionPerformed(evt);
+            }
+        });
+
+        QLHDbtn.setText("Quản Lý Hoá Đơn");
+        QLHDbtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        QLHDbtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        QLHDbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                QLHDbtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -217,19 +223,20 @@ public class InterfaceJF extends javax.swing.JFrame {
                     .addComponent(jTextField1)
                     .addComponent(tblVouchers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tblloai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tblchitiensanpham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btlquanlysanpham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(QLKHbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                    .addComponent(QLKHbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(connectStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(QLNVbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                    .addComponent(QLNVbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                     .addComponent(tblthoat1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(tblBack, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(manageFurnitureBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dashboardBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(manageFurnitureBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(QLHDbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -248,21 +255,23 @@ public class InterfaceJF extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
-                .addComponent(btlquanlysanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(QLKHbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addComponent(btlquanlysanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(QLNVbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tblchitiensanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(QLKHbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addComponent(tblloai, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tblVouchers, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(manageFurnitureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(QLHDbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tblBack)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tblBack)
+                    .addComponent(dashboardBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tblthoat1)
                 .addContainerGap())
@@ -272,12 +281,7 @@ public class InterfaceJF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void QLKHbtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QLKHbtnMouseClicked
-        boolean connectionState = connectToDB();
-        if (connectionState == false) {
-            JOptionPane.showMessageDialog(rootPane, "Kết nối đến dữ liệu thất bại.");
-        } else {
-            showPanel(new CustomerJP());
-        }
+        showPanel(new CustomerJP());
     }//GEN-LAST:event_QLKHbtnMouseClicked
 
     private void btlquanlysanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btlquanlysanphamMouseClicked
@@ -294,12 +298,8 @@ public class InterfaceJF extends javax.swing.JFrame {
 
     private void tblVouchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVouchersMouseClicked
         // TODO add your handling code here:
-        boolean connectionState = connectToDB();
-        if (connectionState == false) {
-            JOptionPane.showMessageDialog(rootPane, "Kết nối đến dữ liệu thất bại.");
-        } else {
-            showPanel(new VoucherJP());
-        }
+
+
     }//GEN-LAST:event_tblVouchersMouseClicked
 
     private void tblBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBackMouseClicked
@@ -311,11 +311,11 @@ public class InterfaceJF extends javax.swing.JFrame {
     }//GEN-LAST:event_QLKHbtnActionPerformed
 
     private void QLNVbtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QLNVbtnMouseClicked
-        showPanel(new AccountJP());
+
     }//GEN-LAST:event_QLNVbtnMouseClicked
 
     private void QLNVbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QLNVbtnActionPerformed
-        // TODO add your handling code here:
+        showPanel(new AccountJP());
     }//GEN-LAST:event_QLNVbtnActionPerformed
 
     private void tblchitiensanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblchitiensanphamActionPerformed
@@ -323,7 +323,7 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
 
     private void tblBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblBackActionPerformed
         this.dispose();
-        new SalesMgrJF(tenTaiKhoan).setVisible(true);
+        new SalesMgrJF(tenTaiKhoan, false).setVisible(true);
     }//GEN-LAST:event_tblBackActionPerformed
 
     private void tblloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblloaiActionPerformed
@@ -335,12 +335,13 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
     }//GEN-LAST:event_tblthoat1MouseClicked
 
     private void tblthoat1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblthoat1ActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
+        new LoginFrame().setVisible(true);
     }//GEN-LAST:event_tblthoat1ActionPerformed
 
     private void btlquanlysanphamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlquanlysanphamActionPerformed
         this.dispose(); // Đóng InterfaceJF hiện tại
-        new SalesMgrJF(tenTaiKhoan).setVisible(true);
+        new SalesMgrJF(tenTaiKhoan, false).setVisible(true);
     }//GEN-LAST:event_btlquanlysanphamActionPerformed
 
     private void connectStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectStatusActionPerformed
@@ -350,6 +351,19 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
     private void manageFurnitureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFurnitureBtnActionPerformed
         showPanel(new ProdmgmtJP());
     }//GEN-LAST:event_manageFurnitureBtnActionPerformed
+
+    private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
+        showPanel(new DashboardJP1());
+    }//GEN-LAST:event_dashboardBtnActionPerformed
+
+    private void QLHDbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QLHDbtnActionPerformed
+        this.dispose();
+        new SalesMgrJF(tenTaiKhoan, true).setVisible(true);
+    }//GEN-LAST:event_QLHDbtnActionPerformed
+
+    private void tblVouchersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblVouchersActionPerformed
+        showPanel(new VoucherJP());
+    }//GEN-LAST:event_tblVouchersActionPerformed
 
     /**
      * @param args the command line arguments
@@ -363,17 +377,18 @@ showPanel(new DetailJP());    }//GEN-LAST:event_tblchitiensanphamActionPerformed
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton QLHDbtn;
     private javax.swing.JButton QLKHbtn;
     private javax.swing.JButton QLNVbtn;
     private javax.swing.JButton btlquanlysanpham;
     private javax.swing.JTextField connectStatus;
+    private javax.swing.JButton dashboardBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton manageFurnitureBtn;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JButton tblBack;
     private javax.swing.JButton tblVouchers;
-    private javax.swing.JButton tblchitiensanpham;
     private javax.swing.JButton tblloai;
     private javax.swing.JButton tblthoat1;
     // End of variables declaration//GEN-END:variables

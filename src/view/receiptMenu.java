@@ -14,23 +14,22 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 public class receiptMenu extends javax.swing.JPanel {
-
     private SalesMgrJF SalesMgr;
     private ReceiptDAO RDAO;
     private VoucherDao VDAO;
     private KhachHangdao_1 KDAO;
     private TaiKhoanDAO NDAO2;
-    private String username;
+    private String usernamer;
 
-    public receiptMenu(SalesMgrJF SalesMgr) {
+    public receiptMenu(SalesMgrJF SalesMgr, String username) {
         this.SalesMgr = SalesMgr;
         this.RDAO = SalesMgr.getRDAO();
         this.VDAO = SalesMgr.getVDAO();
         this.KDAO = SalesMgr.getKDAO();
         this.NDAO2 = SalesMgr.getNDAO2();
-        this.username = SalesMgr.getUser();
+        this.usernamer = username;
+        System.out.println("Username: " + this.usernamer);
         initComponents();
-
     }
 
     public long getID() {
@@ -109,8 +108,7 @@ public class receiptMenu extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Mã voucher không hợp lệ hoặc trống. Bấm OK để bỏ qua.");
         } else {
             int total = calculateTotal(Long.parseLong(ID));
-            int discount = 0;
-            discount = voucher.getGiamGia();
+            int discount = voucher.getGiamGia();
             int discAmount = total * discount / 100;
             int finalPrice = total - discAmount;
             txtDiscount.setText(String.valueOf(discAmount) + "(" + String.valueOf(discount) + "%)");
@@ -127,7 +125,7 @@ public class receiptMenu extends javax.swing.JPanel {
         String creationDate = creationBox.getText();
         String finalPriceStr = txtTotal.getText();
         String desc = txtDesc.getText();
-        long accountID = NDAO2.getAccountID(username);
+        long accountID = NDAO2.getAccountID(usernamer);
         KhachHangEntity khach = KDAO.getByName(tenKhach);
         long customerID = 0;
         if (khach != null) {
@@ -158,6 +156,45 @@ public class receiptMenu extends javax.swing.JPanel {
         );
         RDAO.updateReceipt(receipt);
 
+    }
+
+    public void updateData() {
+
+        String tenKhach = txtKhach.getText();
+        String idStr = IDBox.getText();
+        String creationDate = creationBox.getText();
+        String finalPriceStr = txtTotal.getText();
+        String desc = txtDesc.getText();
+        long accountID = NDAO2.getAccountID(usernamer);
+        KhachHangEntity khach = KDAO.getByName(tenKhach);
+        long customerID = 0;
+        if (khach != null) {
+            customerID = khach.getMaKH();
+        }
+        long id = Long.parseLong(idStr);
+        long voucherId = 0;
+        int value = Integer.parseInt(finalPriceStr.replace(" ", ""));
+
+        boolean discountStat = applyDiscount();
+        if (discountStat == true) {
+            String voucherIdStr = txtVoucher.getText();
+            if (!voucherIdStr.isEmpty() || !voucherIdStr.isBlank()) {
+                voucherId = Long.parseLong(voucherIdStr);
+            }
+            System.out.println("No voucher detected... moving on...");
+        }
+
+        receiptEntities receipt = new receiptEntities(
+                id,
+                customerID,
+                accountID,
+                creationDate,
+                desc,
+                value,
+                false,
+                voucherId
+        );
+        RDAO.updateReceipt(receipt);
     }
 
     /**
@@ -257,12 +294,22 @@ public class receiptMenu extends javax.swing.JPanel {
         });
 
         editButton.setText("Cập Nhật");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Mô Tả");
 
         txtDesc.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         applyVouch.setText("Áp Dụng");
+        applyVouch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                applyVouchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -420,10 +467,36 @@ public class receiptMenu extends javax.swing.JPanel {
     private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
         int select = JOptionPane.showConfirmDialog(null, "Bạn có chắc là thanh toán không?", "Thanh Toán", JOptionPane.YES_NO_OPTION);
         if (select == JOptionPane.YES_OPTION) {
-            this.finishData();
-            JOptionPane.showMessageDialog(null, "Thanh toán thành công.");
+            try {
+                String cash = JOptionPane.showInputDialog(null, "Hãy nhập số tiền khách đã trả: ");
+                String finalPriceStr = txtTotal.getText();
+                int value = Integer.parseInt(finalPriceStr.replace(" ", ""));
+                int cashback = Integer.parseInt(cash) - value;
+                if (cashback >= 0) {
+                    JOptionPane.showMessageDialog(null, "Hãy trả " + cashback + "VND tiền thừa.");
+                    this.finishData();
+                    JOptionPane.showMessageDialog(null, "Thanh toán thành công.");
+                } else if (cashback < 0) {
+                    JOptionPane.showMessageDialog(null, "Thiếu tiền, thanh toán chưa thành công.");
+                }
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Số tiền không hợp lệ, hãy nhập lại. \nLỗi: " + e);
+            }
         }
     }//GEN-LAST:event_payButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        int select = JOptionPane.showConfirmDialog(null, "Bạn có chắc là cập nhật không?", "Cập nhật hoá đơn", JOptionPane.YES_NO_OPTION);
+        if (select == JOptionPane.YES_OPTION) {
+            this.updateData();
+            JOptionPane.showMessageDialog(null, "Cập nhật thành công.");
+        }
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void applyVouchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyVouchActionPerformed
+        this.applyDiscount();
+    }//GEN-LAST:event_applyVouchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
