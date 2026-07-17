@@ -1,9 +1,11 @@
 # GUI Furniture Stock and Sales Management Application
 
 <div style="background-color:rgba(255, 203, 61, 10);">
+  
 > ## Notice
 > This application is in the alpha state and so you may expect large amount of bugs
 > This repository does not contain the MSSQL database and therefore you must create it yourself (based off of the /Entities folder)
+
 </div>
 
 <a> This is a repo that stores our source code for the furniture selling program for a school group project. <br>
