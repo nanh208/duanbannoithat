@@ -4,7 +4,7 @@
   
 > ## Notice
 > This application is in the alpha state and so you may expect large amount of bugs <br>
-> This repository does not contain the MSSQL database and therefore you must create it yourself (based off of the /Entities folder)
+> This repository does not contain the MSSQL database and therefore you must create it yourself (based off of the /entity folder)
 
 </div>
 
